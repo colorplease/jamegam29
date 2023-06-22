@@ -25,7 +25,7 @@ namespace Platformer
         {
             rigidbody = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
-            gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+           // gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         }
 
         private void FixedUpdate()
