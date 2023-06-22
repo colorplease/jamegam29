@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\Bwade\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Bwade\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_jamegam29.-1957975421.00" t="ExcludeRecursive" />
+    <e p="S:\GameJams\JamGam29\jamegam29\jamegam29" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="LevelModule" t="Include">
+          <e p="Scripts" t="Include">
+            <e p="CameraHandler.cs" t="Include" />
+            <e p="DebugLevelModule.cs" t="Include" />
+            <e p="GameEvents" t="Include">
+              <e p="GameEvents" t="Include">
+                <e p="GameEvent.cs" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="UnityAssetStore" t="Include">
+            <e p="2D Platformer" t="Include">
+              <e p="Animations" t="Include" />
+              <e p="Assets" t="Include">
+                <e p="coin" t="Include" />
+                <e p="enemy" t="Include" />
+                <e p="player" t="Include">
+                  <e p="death" t="Include" />
+                  <e p="idle" t="Include" />
+                  <e p="jump" t="Include" />
+                  <e p="run" t="Include" />
+                </e>
+                <e p="TilePalette" t="Include" />
+              </e>
+              <e p="Prefabs" t="Include" />
+              <e p="Scenes" t="Include" />
+              <e p="Scripts" t="Include">
+                <e p="CameraController.cs" t="Include" />
+                <e p="EnemyAI.cs" t="Include" />
+                <e p="GameManager.cs" t="Include" />
+                <e p="PlayerController.cs" t="Include" />
+                <e p="PlayerDeathState.cs" t="Include" />
+              </e>
+            </e>
+          </e>
+        </e>
+        <e p="Scenes" t="Include" />
+        <e p="Settings" t="Include">
+          <e p="Scenes" t="Include" />
+        </e>
+      </e>
+      <e p="jamegam29.sln" t="IncludeFlat" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Temp\Bin" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
