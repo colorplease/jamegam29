@@ -35,8 +35,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     [Range(0, 1)]
     float fCutJumpHeight = 0.5f;
+    [Header("jumping stuff idk")]
     [SerializeField]int jumpCount;
     [SerializeField]int maxJumpCount;
+
+    [Header("Aiming stuff idk")]
 
     public Camera cam;
 
@@ -48,6 +51,14 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]SpriteRenderer playerSprite;
     [SerializeField]SpriteRenderer gunSprite;
+    Vector2 lookDir;
+    float gunRotation;
+    [Header("shooting Stuff idk")]
+    public Transform firePoint;
+    public GameObject bulletPrefab;
+
+
+    public float bulletForce = 20f;
 
 
     void Start()
@@ -62,12 +73,25 @@ public class PlayerController : MonoBehaviour
         Jumping();
         InputGet();
         RotationAim();
+        Shooting();
     }
 
     void FixedUpdate()
     {
         Movement();
         Aiming();        
+    }
+
+    void Shooting()
+    {
+        if(Input.GetButtonDown("Fire1"))
+        {
+            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            rb.AddForce(-firePoint.right * bulletForce, ForceMode2D.Impulse);
+            rigid.AddForce(-lookDir * playerKnockbackForce, ForceMode2D.Impulse);
+            
+        }
     }
 
     void InputGet()
@@ -86,6 +110,7 @@ public class PlayerController : MonoBehaviour
                 fHorizontalVelocity *= Mathf.Pow(1f - fHorizontalDampingWhenTurning, Time.deltaTime * 10f);
             else
                 fHorizontalVelocity *= Mathf.Pow(1f - fHorizontalDampingBasic, Time.deltaTime * 10f);
+            
 
         rigid.velocity = new Vector2(fHorizontalVelocity, rigid.velocity.y);
     }
@@ -139,28 +164,34 @@ public class PlayerController : MonoBehaviour
 
     void Aiming()
     {
-        Vector2 lookDir = mousePos - rigid.position;
+        lookDir = mousePos - rigid.position;
+        print(lookDir);
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 180;
         gun.rotation = Quaternion.Euler(0, 0, angle);
-        print(gun.rotation.eulerAngles.z);
     }
 
     void RotationAim()
     {
-        float gunRotation = gun.localEulerAngles.z;
+        gunRotation = gun.localEulerAngles.z;
         if(gunRotation > 180)
         {
             gunRotation -= 360;
         }
         if(Mathf.Abs(gunRotation) > 89)
         {
+            if(!playerSprite.flipX)
+            {
                 playerSprite.flipX = true;
-                gunSprite.flipY = true;
+                gun.localScale = new Vector3(gun.localScale.x, -Mathf.Abs(gun.localScale.y), gun.localScale.z);
+            }
         }
-        else
+        else if (Mathf.Abs(gunRotation) < 89)
         {
+            if(playerSprite.flipX)
+            {
                 playerSprite.flipX = false;
-                gunSprite.flipY = false;
+                gun.localScale = new Vector3(gun.localScale.x, Mathf.Abs(gun.localScale.y), gun.localScale.z);
+            }
         }
     }
 }
