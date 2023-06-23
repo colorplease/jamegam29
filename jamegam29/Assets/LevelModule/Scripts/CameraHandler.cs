@@ -62,21 +62,13 @@ namespace LevelModule.Scripts
 
             // Check if player's y position is outside of the viewport
             // playerViewportPosition.y will be between 0 and 1 if the player is inside the vertical bounds of the camera
-            if (playerViewportPosition.y < minHeight|| playerViewportPosition.y > 1)
+            if (playerViewportPosition.y < minHeight)
             {
                 return true;
             }
 
             return false;
         }
-        
-        private IEnumerator Co_StartCameraTransition()
-        {
-            yield return new WaitForSeconds(transitionDelay);
-           
-           
-        }
-        
         
         private void LevelTransition(Vector3 newLevelPosition)
         {
