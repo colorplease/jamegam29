@@ -1,6 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+[System.Serializable]
+public class guns
+{
+    public Vector2 gunSize;
+    public Vector2 firePointLocation;
+    public float gunDamage;
+    public float bulletForce;
+    public float fireRate;
+    public Sprite gunSprite;
+}
 
 public class PlayerController : MonoBehaviour
 {
@@ -56,20 +66,23 @@ public class PlayerController : MonoBehaviour
     [Header("shooting Stuff idk")]
     public Transform firePoint;
     public GameObject bulletPrefab;
-
-
-    public float bulletForce = 20f;
+    public GameObject bulletPrefab2;
+    public guns[] guns;
+    public int gunNumber;
+    float nextTimeToFire = 0f;
 
 
     private bool _isFrozen;
-    private RigidbodyConstraints2D defaultConstraints;
-    
+
     void Start()
     {
         Application.targetFrameRate = 240;
         rigid = GetComponent<Rigidbody2D>();
-        defaultConstraints = rigid.constraints;
-    }
+        gunNumber = 0;
+        firePoint.localPosition = new Vector3(guns[gunNumber].firePointLocation.x, guns[gunNumber].firePointLocation.y, firePoint.position.z);
+        gun.localScale = new Vector3(guns[gunNumber].gunSize.x, guns[gunNumber].gunSize.y, firePoint.position.z);
+        gun.GetComponent<SpriteRenderer>().sprite = guns[gunNumber].gunSprite;
+	}
 
 	
 	void Update()
@@ -81,6 +94,7 @@ public class PlayerController : MonoBehaviour
         InputGet();
         RotationAim();
         Shooting();
+        Switching();
     }
 
     void FixedUpdate()
@@ -92,14 +106,52 @@ public class PlayerController : MonoBehaviour
         Aiming();        
     }
 
+    void Ability()
+    {
+        
+    }
+
+    void Switching()
+    {
+        if(Input.GetKeyDown(KeyCode.W))
+        {
+            if(gunNumber < guns.Length - 1)
+            {
+                gunNumber++;
+            }
+            else
+            {
+                gunNumber = 0;
+            }
+            firePoint.localPosition  = new Vector3(guns[gunNumber].firePointLocation.x, guns[gunNumber].firePointLocation.y, firePoint.position.z);
+            gun.localScale = new Vector3(guns[gunNumber].gunSize.x, guns[gunNumber].gunSize.y, firePoint.position.z);
+            gun.GetComponent<SpriteRenderer>().sprite = guns[gunNumber].gunSprite; 
+        }
+    }
+
     void Shooting()
     {
-        if(Input.GetButtonDown("Fire1"))
+        if(Input.GetButtonDown("Fire1") && gunNumber != 1 && Time.time >= nextTimeToFire)
         {
+            nextTimeToFire = Time.time + 1f/guns[gunNumber].fireRate;
             GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            rb.AddForce(-firePoint.right * bulletForce, ForceMode2D.Impulse);
-            
+            rb.AddForce(-firePoint.right * guns[gunNumber].bulletForce, ForceMode2D.Impulse);
+        }
+        if(Input.GetButtonDown("Fire1") && gunNumber == 1 && Time.time >= nextTimeToFire)
+        {
+            nextTimeToFire = Time.time + 1f/guns[gunNumber].fireRate;
+            for(int i = 0; i<Random.Range(10,15);i++)
+            {
+                GameObject bullet = Instantiate(bulletPrefab2, firePoint.position, firePoint.rotation);
+                float variation = Random.Range(-20,20);
+                var x = firePoint.position.x - transform.position.x;
+                var y = firePoint.position.y - transform.position.y;
+                float rotateAngle = variation + (Mathf.Atan2(y,x) * Mathf.Rad2Deg - 180);
+                var MovementDirection = new Vector2(Mathf.Cos(rotateAngle * Mathf.Deg2Rad), Mathf.Sin(rotateAngle*Mathf.Deg2Rad)).normalized;
+                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+                rb.AddForce(-MovementDirection * guns[gunNumber].bulletForce, ForceMode2D.Impulse);
+            }
         }
     }
 
@@ -174,7 +226,6 @@ public class PlayerController : MonoBehaviour
     void Aiming()
     {
         lookDir = mousePos - rigid.position;
-        print(lookDir);
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 180;
         gun.rotation = Quaternion.Euler(0, 0, angle);
     }
@@ -188,22 +239,16 @@ public class PlayerController : MonoBehaviour
         }
         if(Mathf.Abs(gunRotation) > 89)
         {
-            if(!playerSprite.flipX)
-            {
                 playerSprite.flipX = true;
                 gun.localScale = new Vector3(gun.localScale.x, -Mathf.Abs(gun.localScale.y), gun.localScale.z);
-            }
         }
         else if (Mathf.Abs(gunRotation) < 89)
         {
-            if(playerSprite.flipX)
-            {
                 playerSprite.flipX = false;
                 gun.localScale = new Vector3(gun.localScale.x, Mathf.Abs(gun.localScale.y), gun.localScale.z);
-            }
         }
     }
-
+    
     public void FreezePlayer(bool isFrozen)
     {
         _isFrozen = isFrozen;

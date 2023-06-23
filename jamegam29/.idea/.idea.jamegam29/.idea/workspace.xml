@@ -20,9 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e5c49f1-2cd7-4e45-a29d-d9c9d78a6e36" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Settings/Renderer2D.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/Renderer2D.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.jamegam29/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.jamegam29/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +39,9 @@
       <list>
         <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/DebugGameManager.cs" />
         <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/DebugLevelModule.cs" />
+        <option value="$PROJECT_DIR$/Assets/LevelModule/UnityAssetStore/2D Platformer/Scripts/GameManager.cs" />
         <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/CameraHandler.cs" />
+        <option value="$PROJECT_DIR$/Assets/LevelModule/UnityAssetStore/2D Platformer/Scripts/PlayerController.cs" />
       </list>
     </option>
   </component>
@@ -85,7 +85,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687464899302</updated>
-      <workItem from="1687464906182" duration="833000" />
+      <workItem from="1687464906182" duration="3404000" />
     </task>
     <servers />
   </component>
