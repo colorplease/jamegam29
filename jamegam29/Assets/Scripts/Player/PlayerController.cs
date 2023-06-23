@@ -61,15 +61,22 @@ public class PlayerController : MonoBehaviour
     public float bulletForce = 20f;
 
 
+    private bool _isFrozen;
+    private RigidbodyConstraints2D defaultConstraints;
+    
     void Start()
     {
         Application.targetFrameRate = 240;
         rigid = GetComponent<Rigidbody2D>();
-	}
+        defaultConstraints = rigid.constraints;
+    }
 
 	
 	void Update()
     {
+        if (_isFrozen)
+            return;
+        
         Jumping();
         InputGet();
         RotationAim();
@@ -78,6 +85,9 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (_isFrozen)
+            return;
+        
         Movement();
         Aiming();        
     }
@@ -192,6 +202,22 @@ public class PlayerController : MonoBehaviour
                 gun.localScale = new Vector3(gun.localScale.x, Mathf.Abs(gun.localScale.y), gun.localScale.z);
             }
         }
+    }
+
+    public void FreezePlayer(bool isFrozen)
+    {
+        _isFrozen = isFrozen;
+        rigid.isKinematic = isFrozen;
+
+        if (isFrozen)
+        {
+            rigid.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+        else
+        {
+            rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
+       
     }
 }
 

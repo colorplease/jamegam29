@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Platformer
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerUnityController : MonoBehaviour
     {
         public float movingSpeed;
         public float jumpForce;
