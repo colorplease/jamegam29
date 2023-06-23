@@ -4,54 +4,54 @@ using UnityEngine;
 [System.Serializable]
 public class guns
 {
-    public Vector2 gunSize;
-    public Vector2 firePointLocation;
-    public float gunDamage;
-    public float bulletForce;
-    public float fireRate;
-    public Sprite gunSprite;
+    public Vector2 gunSize; //scale of the gun that looks decent on the player
+    public Vector2 firePointLocation; //position of the firepoint to adjust for the scale change
+    public float gunDamage; //you know what this does.
+    public float bulletForce; //affects bullet speed
+    public float fireRate; //you know what this does.
+    public Sprite gunSprite; //you know what this does.
 }
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement Stuff idk")]
      [SerializeField]
-    LayerMask lmWalls;
+    LayerMask lmWalls; //basically "what is jumpable?"
     [SerializeField]
-    float fJumpVelocity = 5;
+    float fJumpVelocity = 5; //jump height
 
     Rigidbody2D rigid;
 
-    float fJumpPressedRemember = 0;
+    float fJumpPressedRemember = 0; 
     [SerializeField]
-    float fJumpPressedRememberTime = 0.2f;
+    float fJumpPressedRememberTime = 0.2f; //when player walks off platform, still register a jump as long as they press the jump button in this amount of time (called coyote time)
 
     float fGroundedRemember = 0;
     [SerializeField]
-    float fGroundedRememberTime = 0.25f;
+    float fGroundedRememberTime = 0.25f; //when player hits the jump button when still in midair, still register jump as long as they hit the ground in this amount of time (called jump buffering)
 
     [SerializeField]
-    float fHorizontalAcceleration = 1;
+    float fHorizontalAcceleration = 1; //speed
     [SerializeField]
     [Range(0, 1)]
-    float fHorizontalDampingBasic = 0.5f;
+    float fHorizontalDampingBasic = 0.5f; //max speed check inspector
     [SerializeField]
     [Range(0, 1)]
-    float fHorizontalDampingWhenStopping = 0.5f;
+    float fHorizontalDampingWhenStopping = 0.5f; //turn around time check inspector
     [SerializeField]
     [Range(0, 1)]
-    float fHorizontalDampingWhenTurning = 0.5f;
+    float fHorizontalDampingWhenTurning = 0.5f;//turn around time check inspector
 
     [SerializeField]
     [Range(0, 1)]
-    float fCutJumpHeight = 0.5f;
+    float fCutJumpHeight = 0.5f; //idk what this does lmao
     [Header("jumping stuff idk")]
-    [SerializeField]int jumpCount;
-    [SerializeField]int maxJumpCount;
+    [SerializeField]int jumpCount; //current amount of times the player has jumped midair
+    [SerializeField]int maxJumpCount; //max amount of times player is allowed to jump midair
 
     [Header("Aiming stuff idk")]
 
-    public Camera cam;
+    public Camera cam; //main camera
 
     Vector2 movement;
     Vector2 mousePos;
@@ -64,12 +64,13 @@ public class PlayerController : MonoBehaviour
     Vector2 lookDir;
     float gunRotation;
     [Header("shooting Stuff idk")]
-    public Transform firePoint;
-    public GameObject bulletPrefab;
-    public GameObject bulletPrefab2;
+    public Transform firePoint; //attatched to gun parent
+    public GameObject bulletPrefab; //in the prefabs folder
+    public GameObject bulletPrefab2; //the shotgun bullet in prefabs folder
     public guns[] guns;
-    public int gunNumber;
+    public int gunNumber; //current gun that the player is holding
     float nextTimeToFire = 0f;
+    [SerializeField]Animator crosshair; //drag in "crosshair hi guys" from the hierarchy
 
 
     private bool _isFrozen;
@@ -78,6 +79,7 @@ public class PlayerController : MonoBehaviour
     {
         Application.targetFrameRate = 240;
         rigid = GetComponent<Rigidbody2D>();
+        //sets the current gun the player is holding to the pistol
         gunNumber = 0;
         firePoint.localPosition = new Vector3(guns[gunNumber].firePointLocation.x, guns[gunNumber].firePointLocation.y, firePoint.position.z);
         gun.localScale = new Vector3(guns[gunNumber].gunSize.x, guns[gunNumber].gunSize.y, firePoint.position.z);
@@ -95,6 +97,7 @@ public class PlayerController : MonoBehaviour
         RotationAim();
         Shooting();
         Switching();
+        Ability();
     }
 
     void FixedUpdate()
@@ -108,11 +111,58 @@ public class PlayerController : MonoBehaviour
 
     void Ability()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            //shotgun
+            if(gunNumber == 1)
+            {
+                //turns on crosshair animation, visible to screen
+                crosshair.SetBool("byebye", true);
+                StartCoroutine(crossHair());
+            }
+            
+        }
+        if(Input.GetKey(KeyCode.Mouse1))
+        {
+            if(gunNumber == 1)
+            {
+                //follows mouse position and activates trail renderer
+                crosshair.transform.position = new Vector3(mousePos.x, mousePos.y, crosshair.transform.position.z);
+                TrailRenderer wheredidigoTrail = GetComponent<TrailRenderer>();
+                wheredidigoTrail.enabled = true;
+            }
+        }
+        if(Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            if(gunNumber == 1)
+            {
+                //stops the crosshair coroutine for the bullet time, removes the crosshair, resets the player velocity, and resumes normal time
+                StopAllCoroutines();
+                StartCoroutine(trail());
+                crosshair.SetBool("byebye", false);
+                rigid.velocity = Vector2.zero;
+                transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
+                Time.timeScale = 1f;
+            }
+        }
+    }
+
+    IEnumerator crossHair()
+    {
+        yield return new WaitForSeconds(0.1875f);
+        Time.timeScale = 0.1f;
+    }
+
+    IEnumerator trail()
+    {
+        yield return new WaitForSeconds(0.3f);
+        TrailRenderer wheredidigoTrail = GetComponent<TrailRenderer>();
+        wheredidigoTrail.enabled = false;
     }
 
     void Switching()
     {
+        //switches gun number and edits the gun object on the player to match using the gun[]
         if(Input.GetKeyDown(KeyCode.W))
         {
             if(gunNumber < guns.Length - 1)
@@ -251,6 +301,8 @@ public class PlayerController : MonoBehaviour
     
     public void FreezePlayer(bool isFrozen)
     {
+        StopAllCoroutines();
+        Time.timeScale = 1;
         _isFrozen = isFrozen;
         rigid.isKinematic = isFrozen;
 
