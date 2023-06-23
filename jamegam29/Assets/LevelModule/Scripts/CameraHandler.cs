@@ -27,6 +27,8 @@ namespace LevelModule.Scripts
         private int currentLevelIndex;
         private bool inTransition = false;
 
+        [SerializeField]ScreenShake screenShake;
+
         private void Start()
         {
             camera = GetComponent<Camera>();
@@ -37,7 +39,7 @@ namespace LevelModule.Scripts
         {
             Vector3 playerViewportPosition = Camera.main.WorldToViewportPoint(target.position);
             
-            Debug.Log("ViewPoint Position: " + playerViewportPosition.y );
+            //Debug.Log("ViewPoint Position: " + playerViewportPosition.y );
             
             if (inTransition)
                 return;
@@ -58,7 +60,7 @@ namespace LevelModule.Scripts
         {
             Vector3 playerViewportPosition = Camera.main.WorldToViewportPoint(target.position);
             
-            Debug.Log("ViewPoint Position: " + playerViewportPosition.y );
+            //Debug.Log("ViewPoint Position: " + playerViewportPosition.y );
 
             // Check if player's y position is outside of the viewport
             // playerViewportPosition.y will be between 0 and 1 if the player is inside the vertical bounds of the camera
@@ -73,6 +75,9 @@ namespace LevelModule.Scripts
         private void LevelTransition(Vector3 newLevelPosition)
         {
             // Transition consists of two parts: zooming out and moving to new position, then zooming back in
+
+            //yo wsg guys this is colorplease im passing in a position from screenShake
+            screenShake.RecordCurrentScreenPos();
 
             // Create a new Vector3 with new x and y values, but keep the original z value
             Vector3 newPosition = newLevelPosition + offset;

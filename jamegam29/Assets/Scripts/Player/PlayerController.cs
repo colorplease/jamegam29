@@ -4,12 +4,17 @@ using UnityEngine;
 [System.Serializable]
 public class guns
 {
+    public string gunName;
     public Vector2 gunSize; //scale of the gun that looks decent on the player
     public Vector2 firePointLocation; //position of the firepoint to adjust for the scale change
     public float gunDamage; //you know what this does.
     public float bulletForce; //affects bullet speed
     public float fireRate; //you know what this does.
     public Sprite gunSprite; //you know what this does.
+    public float shakeDuration; //passes to the screenshake script
+    public AnimationCurve curve; //use to customize the screenshake per gun
+    public float intensifier; //multiplier for animation curve because they a lil too strong
+    public GameObject bulletType; //check prefabs folder bro
 }
 
 public class PlayerController : MonoBehaviour
@@ -65,12 +70,15 @@ public class PlayerController : MonoBehaviour
     float gunRotation;
     [Header("shooting Stuff idk")]
     public Transform firePoint; //attatched to gun parent
-    public GameObject bulletPrefab; //in the prefabs folder
-    public GameObject bulletPrefab2; //the shotgun bullet in prefabs folder
     public guns[] guns;
     public int gunNumber; //current gun that the player is holding
     float nextTimeToFire = 0f;
     [SerializeField]Animator crosshair; //drag in "crosshair hi guys" from the hierarchy
+    [SerializeField]ScreenShake screenShake; //check the Main Camera and drag in ScreenShake
+    [SerializeField]bool heymaImdoingmyAbilityHere; //check when player is mid ability
+    [SerializeField]Transform testFire; //used for sniper ability to check whether enemy is in line of sight
+    [SerializeField]Transform testFireTip; //point where raycast fires
+    bool lockedOn; //used to resume aiming if enemy is out of line of sight
 
 
     private bool _isFrozen;
@@ -111,8 +119,13 @@ public class PlayerController : MonoBehaviour
 
     void Ability()
     {
+
+        
         if(Input.GetKeyDown(KeyCode.Mouse1))
         {
+            //sniper
+
+
             //shotgun
             if(gunNumber == 1)
             {
@@ -120,6 +133,7 @@ public class PlayerController : MonoBehaviour
                 crosshair.SetBool("byebye", true);
                 StartCoroutine(crossHair());
             }
+            heymaImdoingmyAbilityHere = true;
             
         }
         if(Input.GetKey(KeyCode.Mouse1))
@@ -131,10 +145,32 @@ public class PlayerController : MonoBehaviour
                 TrailRenderer wheredidigoTrail = GetComponent<TrailRenderer>();
                 wheredidigoTrail.enabled = true;
             }
+            if(gunNumber == 2)
+            {
+                GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+                for(int i = 0; i<enemies.Length; i++)
+                {
+                    Vector2 whereisEnemy = new Vector2(enemies[i].transform.position.x, enemies[i].transform.position.y) - rigid.position;
+                    float angle = Mathf.Atan2(whereisEnemy.y, whereisEnemy.x) * Mathf.Rad2Deg - 90;
+                    testFire.rotation = Quaternion.Euler(testFire.rotation.x, testFire.rotation.y, angle);
+                    RaycastHit2D hit = Physics2D.Raycast(testFire.position, whereisEnemy);
+                    Debug.DrawRay(testFireTip.position, whereisEnemy, Color.red);
+                    if(hit.collider.tag == "Enemy")
+                    {
+                        gun.rotation = Quaternion.Euler(0, 0, angle - 90);
+                        lockedOn = true;
+                    }
+                    else
+                    {
+                        lockedOn = false;
+                    }
+                    
+                }
+            }
         }
         if(Input.GetKeyUp(KeyCode.Mouse1))
         {
-            if(gunNumber == 1)
+            if(gunNumber == 1 && heymaImdoingmyAbilityHere == true)
             {
                 //stops the crosshair coroutine for the bullet time, removes the crosshair, resets the player velocity, and resumes normal time
                 StopAllCoroutines();
@@ -144,6 +180,12 @@ public class PlayerController : MonoBehaviour
                 transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
                 Time.timeScale = 1f;
             }
+            if(gunNumber == 2 && heymaImdoingmyAbilityHere == true)
+            {
+                lockedOn = false;
+                
+            }
+            heymaImdoingmyAbilityHere = false;
         }
     }
 
@@ -176,6 +218,16 @@ public class PlayerController : MonoBehaviour
             firePoint.localPosition  = new Vector3(guns[gunNumber].firePointLocation.x, guns[gunNumber].firePointLocation.y, firePoint.position.z);
             gun.localScale = new Vector3(guns[gunNumber].gunSize.x, guns[gunNumber].gunSize.y, firePoint.position.z);
             gun.GetComponent<SpriteRenderer>().sprite = guns[gunNumber].gunSprite; 
+            nextTimeToFire = Time.time;
+
+            //stops shotgun ability
+            //stops the crosshair coroutine for the bullet time, removes the crosshair, resets the player velocity, and resumes normal time
+                StopAllCoroutines();
+                TrailRenderer wheredidigoTrail = GetComponent<TrailRenderer>();
+                wheredidigoTrail.enabled = false;
+                crosshair.SetBool("byebye", false);
+                Time.timeScale = 1f;
+                heymaImdoingmyAbilityHere = false;
         }
     }
 
@@ -183,17 +235,26 @@ public class PlayerController : MonoBehaviour
     {
         if(Input.GetButtonDown("Fire1") && gunNumber != 1 && Time.time >= nextTimeToFire)
         {
-            nextTimeToFire = Time.time + 1f/guns[gunNumber].fireRate;
-            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            if(gunNumber == 1 && heymaImdoingmyAbilityHere == true)
+            {
+                nextTimeToFire = Time.time;
+                print("ses");
+            }
+            else
+            {
+                nextTimeToFire = Time.time + 1f/guns[gunNumber].fireRate;
+            }
+            GameObject bullet = Instantiate(guns[gunNumber].bulletType, firePoint.position, firePoint.rotation);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
             rb.AddForce(-firePoint.right * guns[gunNumber].bulletForce, ForceMode2D.Impulse);
+            screenShake.ShakeShake(guns[gunNumber].shakeDuration, guns[gunNumber].curve, guns[gunNumber].intensifier);
         }
         if(Input.GetButtonDown("Fire1") && gunNumber == 1 && Time.time >= nextTimeToFire)
         {
             nextTimeToFire = Time.time + 1f/guns[gunNumber].fireRate;
             for(int i = 0; i<Random.Range(10,15);i++)
             {
-                GameObject bullet = Instantiate(bulletPrefab2, firePoint.position, firePoint.rotation);
+                GameObject bullet = Instantiate(guns[gunNumber].bulletType, firePoint.position, firePoint.rotation);
                 float variation = Random.Range(-20,20);
                 var x = firePoint.position.x - transform.position.x;
                 var y = firePoint.position.y - transform.position.y;
@@ -201,6 +262,7 @@ public class PlayerController : MonoBehaviour
                 var MovementDirection = new Vector2(Mathf.Cos(rotateAngle * Mathf.Deg2Rad), Mathf.Sin(rotateAngle*Mathf.Deg2Rad)).normalized;
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
                 rb.AddForce(-MovementDirection * guns[gunNumber].bulletForce, ForceMode2D.Impulse);
+                screenShake.ShakeShake(guns[gunNumber].shakeDuration, guns[gunNumber].curve, guns[gunNumber].intensifier);
             }
         }
     }
@@ -275,9 +337,12 @@ public class PlayerController : MonoBehaviour
 
     void Aiming()
     {
-        lookDir = mousePos - rigid.position;
-        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 180;
-        gun.rotation = Quaternion.Euler(0, 0, angle);
+        if(gunNumber != 2 || lockedOn == false)
+        {
+            lookDir = mousePos - rigid.position;
+            float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 180;
+            gun.rotation = Quaternion.Euler(0, 0, angle);
+        }
     }
 
     void RotationAim()
