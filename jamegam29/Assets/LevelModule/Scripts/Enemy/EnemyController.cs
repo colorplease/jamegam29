@@ -26,6 +26,7 @@ namespace LevelModule.Scripts.Enemy
         private void Start()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
+            player = GameObject.FindWithTag("Player");
         }
 
         private void Update()
@@ -49,6 +50,8 @@ namespace LevelModule.Scripts.Enemy
 
         private void AttackHarp()
         {
+            DetectCollisions();
+            
             if (_isCoolingDown)
                 return;
             
@@ -67,6 +70,8 @@ namespace LevelModule.Scripts.Enemy
 
         private void AttackGoldenGoose()
         {
+            DetectCollisions();
+            
             if (_isCoolingDown)
                 return;
             
@@ -85,22 +90,7 @@ namespace LevelModule.Scripts.Enemy
       
         private void AttackBeanstalkTendrils()
         {
-            // Get all colliders within the attack radius
-            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, enemyData.meleeAttackRadius);
-
-            // For each collider...
-            foreach (Collider2D hit in hits)
-            {
-                // ...check if it's the player...
-                if (hit.CompareTag("Player"))
-                {
-                    Vector3 knockBackDirection = (hit.transform.position - transform.position).normalized;
-                    Vector3 knockBackTarget = hit.transform.position + knockBackDirection * enemyData.knockBackDistance;
-                    hit.transform.DOMove(knockBackTarget, enemyData.knockBackDuration);
-                    // ...and if so, deal damage to it
-                    hit.GetComponent<PlayerHealthHandler>().TakeDamage(enemyData.meleeAttackDamage);
-                }
-            }
+            DetectCollisions();
         }
         
         private void AttackSoyFish()
@@ -109,6 +99,11 @@ namespace LevelModule.Scripts.Enemy
             Vector3 direction = (player.transform.position - transform.position).normalized;
             transform.position += direction * enemyData.moveSpeed * Time.deltaTime;
             
+            DetectCollisions();
+        }
+
+        private void DetectCollisions()
+        {
             Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, enemyData.meleeAttackRadius);
 
             // For each collider...

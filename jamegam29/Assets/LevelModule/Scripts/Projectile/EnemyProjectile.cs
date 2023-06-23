@@ -19,6 +19,7 @@ namespace LevelModule.Scripts.Projectile
         
         private ProjectileType currentProjectileType;
         private Rigidbody2D rb;
+  
         private Vector2 direction; // Direction of the projectile
         
         private bool isInitialized;
@@ -28,20 +29,30 @@ namespace LevelModule.Scripts.Projectile
         
         private void Start()
         {
-            
+           
             // Start the DestroyAfterLifetime coroutine
             StartCoroutine(DestroyAfterLifetime());
         }
 
         public void InitializeProjectile(Vector2 shootDirection, int damage,ProjectileType projectileType)
         {
+            if (rb == null)
+            {
+                rb = GetComponent<Rigidbody2D>();
+            }
+            
             direction = shootDirection;
             currentProjectileType = projectileType;
             projectileDamage = damage;
+
+            if (projectileType == ProjectileType.Egg)
+            {
+                // Set the initial force to apply to the Rigidbody2D to move the projectile
+                Vector2 initialForce = new Vector2(direction.x * speed, verticalSpeed);
+                rb.AddForce(initialForce, ForceMode2D.Impulse);
+            }
             isInitialized = true;
         }
-       
-
 
         // Update is called once per frame
         private void Update()
@@ -55,7 +66,7 @@ namespace LevelModule.Scripts.Projectile
                     MoveProjectileForward();
                     break;
                 case ProjectileType.Egg:
-                    LobProjectile();
+                    //LobProjectile();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

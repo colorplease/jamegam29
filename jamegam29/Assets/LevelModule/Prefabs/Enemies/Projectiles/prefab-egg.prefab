@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4057951853794870856}
   - component: {fileID: 3444542131817075901}
   - component: {fileID: 7675397576229547335}
-  - component: {fileID: 6350605025310428881}
+  - component: {fileID: 382615492450712319}
   m_Layer: 0
   m_Name: prefab-egg
   m_TagString: Untagged
@@ -102,13 +102,22 @@ MonoBehaviour:
   lifetime: 6
   gravity: -9.8
   damageRadius: 1
---- !u!136 &6350605025310428881
-CapsuleCollider:
+--- !u!50 &382615492450712319
+Rigidbody2D:
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1221171294597252121}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -116,12 +125,7 @@ CapsuleCollider:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 2.56
-  m_Height: 5.12
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
