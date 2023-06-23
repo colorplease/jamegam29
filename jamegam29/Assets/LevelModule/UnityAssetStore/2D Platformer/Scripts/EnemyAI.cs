@@ -25,10 +25,10 @@ namespace Platformer
 
         void FixedUpdate()
         {
-            if(!triggerCollider.IsTouchingLayers(ground) || triggerCollider.IsTouchingLayers(wall))
-            {
-                Flip();
-            }
+            // if(!triggerCollider.IsTouchingLayers(ground) || triggerCollider.IsTouchingLayers(wall))
+            // {
+            //     Flip();
+            // }
         }
         
         private void Flip()

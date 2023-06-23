@@ -35,10 +35,6 @@ namespace LevelModule.Scripts
 
         private void Update()
         {
-            Vector3 playerViewportPosition = Camera.main.WorldToViewportPoint(target.position);
-            
-            Debug.Log("ViewPoint Position: " + playerViewportPosition.y );
-            
             if (inTransition)
                 return;
             
@@ -57,9 +53,6 @@ namespace LevelModule.Scripts
         private bool IsPlayerOutOfYView()
         {
             Vector3 playerViewportPosition = Camera.main.WorldToViewportPoint(target.position);
-            
-            Debug.Log("ViewPoint Position: " + playerViewportPosition.y );
-
             // Check if player's y position is outside of the viewport
             // playerViewportPosition.y will be between 0 and 1 if the player is inside the vertical bounds of the camera
             if (playerViewportPosition.y < minHeight)
