@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using DG.Tweening;
+using GameEvents;
 using LevelModule.Scripts.Projectile;
 using UnityEngine;
 
@@ -17,20 +19,55 @@ namespace LevelModule.Scripts.Enemy
         }
 
         public EnemyData enemyData;
-        public GameObject player; // Reference to the player
-        public Transform projectileSpawnPosition;
         
-        private bool _isCoolingDown;
+        public Transform projectileSpawnPosition;
+
+        public GameEvent OnLevelTransitionEvent;
+        public GameEvent OnLevelTransitionFinishedEvent;
+        
+      
+      
+        
+        private EnemyHealthHandler enemyHealthHandler;
         private SpriteRenderer _spriteRenderer;
+        private LevelTransitionEventHandler _levelTransitionEventHandler;
+        private LevelTransitionFinishedEventHandler _levelTransitionFinishedEventHandler;
+        
+        private GameObject player; // Reference to the player
+        private bool _isCoolingDown;
+        private bool isFrozen;
+       
+
+        private void Awake()
+        {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            enemyHealthHandler = GetComponent<EnemyHealthHandler>();
+            _levelTransitionEventHandler = new LevelTransitionEventHandler(this);
+            _levelTransitionFinishedEventHandler = new LevelTransitionFinishedEventHandler(this);
+        }
+
+        private void OnEnable()
+        {
+            OnLevelTransitionEvent.RegisterListener(_levelTransitionEventHandler);
+            OnLevelTransitionFinishedEvent.RegisterListener(_levelTransitionFinishedEventHandler);
+        }
+
+        private void OnDestroy()
+        {
+            OnLevelTransitionEvent.UnregisterListener(_levelTransitionEventHandler);
+            OnLevelTransitionFinishedEvent.UnregisterListener(_levelTransitionFinishedEventHandler);
+        }
 
         private void Start()
         {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
             player = GameObject.FindWithTag("Player");
         }
 
         private void Update()
         {
+            if (!enemyHealthHandler.IsAlive() || isFrozen)
+                return;
+            
             switch(enemyData.enemyType)
             {
                 case EnemyType.Harp:
@@ -129,6 +166,11 @@ namespace LevelModule.Scripts.Enemy
             _isCoolingDown = false;
         }
 
+        private void FreezeEnemy(bool freeze)
+        {
+            isFrozen = freeze;
+        }
+
         private void OnDrawGizmos()
         {
             if (enemyData == null)
@@ -136,6 +178,36 @@ namespace LevelModule.Scripts.Enemy
 
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, enemyData.meleeAttackRadius);
+        }
+        
+        private class LevelTransitionEventHandler : IGameEventListener
+        {
+            private readonly EnemyController _enemyController;
+
+            public LevelTransitionEventHandler (EnemyController enemyController)
+            {
+                _enemyController = enemyController;
+            }
+
+            public void OnEventRaised()
+            {
+                _enemyController.FreezeEnemy(true);
+            }
+        }
+        
+        private class LevelTransitionFinishedEventHandler : IGameEventListener
+        {
+            private readonly EnemyController _enemyController;
+
+            public LevelTransitionFinishedEventHandler(EnemyController enemyController)
+            {
+                _enemyController = enemyController;
+            }
+
+            public void OnEventRaised()
+            {
+                _enemyController.FreezeEnemy(false);
+            }
         }
     }
 }

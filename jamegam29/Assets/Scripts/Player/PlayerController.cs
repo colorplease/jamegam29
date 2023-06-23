@@ -246,6 +246,7 @@ public class PlayerController : MonoBehaviour
             }
             GameObject bullet = Instantiate(guns[gunNumber].bulletType, firePoint.position, firePoint.rotation);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            bullet.GetComponent<PlayerBullet>().InitiializeBullet(guns[gunNumber].gunDamage);
             rb.AddForce(-firePoint.right * guns[gunNumber].bulletForce, ForceMode2D.Impulse);
             screenShake.ShakeShake(guns[gunNumber].shakeDuration, guns[gunNumber].curve, guns[gunNumber].intensifier);
         }

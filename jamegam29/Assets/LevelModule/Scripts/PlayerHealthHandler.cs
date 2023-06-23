@@ -5,7 +5,7 @@ namespace LevelModule.Scripts
     public class PlayerHealthHandler : MonoBehaviour, IDamageable
     {
         [SerializeField] private int maxHealth = 100; // The maximum health of the GameObject
-        [SerializeField] private HealthBarHandler _healthBarHandler;
+        [SerializeField] private PlayerHealthBarHandler playerHealthBarHandler;
         
         private int currentHealth; // The current health of the GameObject
 
@@ -18,7 +18,7 @@ namespace LevelModule.Scripts
         public void TakeDamage(int damage)
         {
             currentHealth -= damage;
-            _healthBarHandler.UpdateHealthBar(currentHealth);
+            playerHealthBarHandler.UpdateHealthBar(currentHealth);
 
             // If the health drops to 0 or below, trigger death
             if (currentHealth <= 0)
