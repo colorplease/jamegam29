@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using GameEvents;
 using LevelModule.Scripts.Enemy;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemySpawnController : MonoBehaviour
 {
@@ -13,13 +16,19 @@ public class EnemySpawnController : MonoBehaviour
     [SerializeField]int enemyToSpawn;
 
     private GameObject playerObjRef;
-    
-    
+
+    private EnemyController _activeController;
+    private EnemyController.EnemyType activeEnemyType;
     
     // Start is called before the first frame update
-    void Start()
+
+    private void Awake()
     {
         playerObjRef = GameObject.FindWithTag("Player");
+    }
+    
+    public void SpawnSelectedEnemy()
+    {
         //1 tendril
         //2 harp
         //3 soyfish
@@ -27,30 +36,30 @@ public class EnemySpawnController : MonoBehaviour
         switch(enemyToSpawn)
         {
             case 1:
-            SpawnEnemy(EnemyController.EnemyType.BeanstalkTendrils);
-            break;
+                SpawnEnemy(EnemyController.EnemyType.BeanstalkTendrils);
+                break;
             case 2:
-            SpawnEnemy(EnemyController.EnemyType.Harp);
-            break;
+                SpawnEnemy(EnemyController.EnemyType.Harp);
+                break;
             case 3:
-            SpawnEnemy(EnemyController.EnemyType.SoyFish);
-            break;
+                SpawnEnemy(EnemyController.EnemyType.SoyFish);
+                break;
             case 4:
-            SpawnEnemy(EnemyController.EnemyType.GoldenGoose);
-            break;
+                SpawnEnemy(EnemyController.EnemyType.GoldenGoose);
+                break;
         }
     }
 
-    public void SpawnEnemy(EnemyController.EnemyType enemyType)
+    private void SpawnEnemy(EnemyController.EnemyType enemyType)
     {
         // Get the camera's bounds
         Camera camera = Camera.main;
         float halfHeight = camera.orthographicSize;
         float halfWidth = camera.aspect * halfHeight;
-        float leftBound = camera.transform.position.x - halfWidth - 1;
-        float rightBound = camera.transform.position.x + halfWidth + 1;
-        float lowerBound = camera.transform.position.y - halfHeight - 1;
-        float upperBound = camera.transform.position.y + halfHeight + 1;
+        float leftBound = camera.transform.position.x - halfWidth - 2;
+        float rightBound = camera.transform.position.x + halfWidth + 2;
+        float lowerBound = camera.transform.position.y - halfHeight - 2;
+        float upperBound = camera.transform.position.y + halfHeight + 0.1f;
 
         // Generate a random spawn position
         float spawnX = Random.value < 0.5 ? Random.Range(leftBound, camera.transform.position.x - halfWidth) : Random.Range(camera.transform.position.x + halfWidth, rightBound);
@@ -59,12 +68,14 @@ public class EnemySpawnController : MonoBehaviour
         Vector3 spawnPosition = new Vector3(spawnX, spawnY, 0);
 
         var enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-
+        var enemyController = enemy.GetComponent<EnemyController>();
+        _activeController = enemyController;
+        activeEnemyType = enemyType;
+        
         enemy.transform.DOJump(spawnPoints[0].position, jumpPower, 1, durationJump).SetEase(Ease.Flash).OnComplete(() =>
         {
-            var enemyController = enemy.GetComponent<EnemyController>();
-            enemyController.InitializeEnemy(enemyType);
-
+            //enemyController.InitializeEnemy(enemyType);
+            _activeController.InitializeEnemy(activeEnemyType);
             // Flip the enemy sprite to face the player
             SpriteRenderer spriteRenderer = enemy.GetComponent<SpriteRenderer>();
             if (spriteRenderer != null)
@@ -74,4 +85,11 @@ public class EnemySpawnController : MonoBehaviour
             }
         });
     }
+
+    public void InitializeEnemy()
+    {
+        
+    }
+    
+  
 }

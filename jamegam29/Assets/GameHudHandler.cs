@@ -21,7 +21,8 @@ public class GameHudHandler : MonoBehaviour, IGameEventListener
 
     public void OnEventRaised()
     {
-        gameOverView.SetActive(true);
+        if(gameOverView != null)
+            gameOverView.SetActive(true);
     }
 
     public void ButtonEvt_Retry()

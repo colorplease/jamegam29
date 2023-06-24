@@ -101,7 +101,7 @@ MonoBehaviour:
   speed: 6
   lifetime: 6
   gravity: -9.8
-  damageRadius: 1
+  damageRadius: 0.5
 --- !u!50 &382615492450712319
 Rigidbody2D:
   serializedVersion: 4

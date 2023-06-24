@@ -48,21 +48,21 @@ namespace LevelModule.Scripts
             if (explodeOnDeath)
             {
                
-                //Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-
-                // Get all colliders within the explosion radius
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
-
-                // For each collider...
-                foreach (Collider2D hit in colliders)
-                {
-                    // If the collider has the "Player" tag...
-                    if (hit.CompareTag("Player"))
-                    {
-                        // Cause the player to take damage
-                        hit.GetComponent<IDamageable>().TakeDamage(explosionDamage);
-                    }
-                }
+                // //Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+                //
+                // // Get all colliders within the explosion radius
+                // Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+                //
+                // // For each collider...
+                // foreach (Collider2D hit in colliders)
+                // {
+                //     // If the collider has the "Player" tag...
+                //     if (hit.CompareTag("Player"))
+                //     {
+                //         // Cause the player to take damage
+                //         hit.GetComponent<IDamageable>().TakeDamage(explosionDamage);
+                //     }
+                // }
 
                 StartCoroutine(Co_Explosion());
             }

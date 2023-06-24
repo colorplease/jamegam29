@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
 using DG.Tweening;
 using GameEvents;
 using UnityEngine;
@@ -10,102 +7,112 @@ namespace LevelModule.Scripts
 {
     public class CameraHandler : MonoBehaviour
     {
+        [SerializeField] private LevelManager _levelManager;
+        [SerializeField] ScreenShake screenShake;
+        
+        [Tooltip("Camera size when zooming in after transition")]
+        [SerializeField] private float[] zoomLevelData;
         [SerializeField] private GameEvent levelTransitionEvent;
         [SerializeField] private GameEvent levelTransitionFinishedEvent;
         [SerializeField] private float minHeight;
         [SerializeField] private Transform target; // Player's Transform
-        [SerializeField] private List<Transform> levelStartTransforms; // Transform to indicate where each level begins
+       // [SerializeField] private List<Transform> levelStartTransforms; // Transform to indicate where each level begins
+     
         [SerializeField] private Vector3 offset; // Offset from the target (player)
         [SerializeField] private float smoothSpeed = 0.125f; // Speed at which the camera follows the player
         [SerializeField] private float zoomOutSize = 10f; // Camera size when zooming out for transition
-        [SerializeField] private float zoomInSize = 5f; // Camera size when zooming in after transition
+        //[SerializeField] private float zoomInSize = 5f; // Camera size when zooming in after transition
 
         [SerializeField] private PlayerController playerController;
 
         // These are the sizes and speed for zooming.
         [SerializeField] private float zoomSpeed = 2f;
         [SerializeField] private float transitionDelay = 0.25f;
-
-        private Camera camera; // Reference to the Camera component
+        
         private int currentLevelIndex;
         private bool inTransition = false;
 
-        [SerializeField] ScreenShake screenShake;
+       
+        
+        private Camera camera;
+
+        private void Awake()
+        {
+            camera = Camera.main;
+        }
 
         private void Start()
         {
-            camera = GetComponent<Camera>();
             currentLevelIndex = 0;
         }
-
+        
         private void Update()
         {
-            Vector3 playerViewportPosition = Camera.main.WorldToViewportPoint(target.position);
-
-            //Debug.Log("ViewPoint Position: " + playerViewportPosition.y );
-
             if (inTransition)
                 return;
 
             // Check if player is out view and a level exists below us
-            if (IsPlayerOutOfYView() && currentLevelIndex < levelStartTransforms.Count)
+            if (IsPlayerOutOfYView())
             {
                 // Handle player out of view situation
                 inTransition = true;
                 playerController.FreezePlayer(true);
 
-
-                LevelTransition(levelStartTransforms[currentLevelIndex].position);
+                Debug.Log("Player out of view");
+                StartCoroutine(LevelTransition());
             }
         }
 
         private bool IsPlayerOutOfYView()
         {
-            Vector3 playerViewportPosition = Camera.main.WorldToViewportPoint(target.position);
+            Vector3 playerViewportPosition = camera.WorldToViewportPoint(target.position);
 
-            //Debug.Log("ViewPoint Position: " + playerViewportPosition.y );
-
-            // Check if player's y position is outside of the viewport
-            // playerViewportPosition.y will be between 0 and 1 if the player is inside the vertical bounds of the camera
-            if (playerViewportPosition.y < minHeight)
-            {
-                return true;
-            }
-
-            return false;
+            return playerViewportPosition.y < minHeight;
         }
 
-        private void LevelTransition(Vector3 newLevelPosition)
+        private IEnumerator LevelTransition()
         {
-            // Transition consists of two parts: zooming out and moving to new position, then zooming back in
+            //screenShake.RecordCurrentScreenPos();
+            
             levelTransitionEvent.Raise();
+            
+            var newLevelPosition = _levelManager.GetCurrentLevelPosition();
+            Debug.Log("Transition Started " + newLevelPosition);
 
-            //yo wsg guys this is colorplease im passing in a position from screenShake
-            screenShake.RecordCurrentScreenPos();
-
-            // Create a new Vector3 with new x and y values, but keep the original z value
             Vector3 newPosition = newLevelPosition + offset;
-            newPosition.z = transform.position.z; // Keep the original z value
+            newPosition.z = transform.position.z;
 
-            // Start the sequence
-            Sequence sequence = DOTween.Sequence();
+            float t = 0f;
+            Vector3 startCameraPosition = transform.position;
+            float startOrthoSize = camera.orthographicSize;
 
-            // Add a Tween to the sequence that moves the camera to the new position and zoom out at the same time
-            sequence.Append(transform.DOMove(newPosition, 1 / smoothSpeed).SetEase(Ease.InOutSine));
-            sequence.Join(camera.DOOrthoSize(zoomOutSize, 1 / zoomSpeed).SetEase(Ease.InOutSine));
-
-            // Add a Tween to the sequence that zooms back in
-            sequence.Append(camera.DOOrthoSize(zoomInSize, 1 / zoomSpeed).SetEase(Ease.InOutSine));
-
-            // Handle what happens after the transition
-            sequence.OnComplete(() =>
+            // Move the camera and zoom out
+            while (t < 1)
             {
-                Debug.Log("Transition Finished");
-                inTransition = false;
-                currentLevelIndex++;
-                playerController.FreezePlayer(false);
-                levelTransitionFinishedEvent.Raise();
-            });
+                t += Time.deltaTime * smoothSpeed;
+                transform.position = Vector3.Lerp(startCameraPosition, newPosition, t);
+                camera.orthographicSize = Mathf.Lerp(startOrthoSize, zoomOutSize, t);
+                yield return null;
+            }
+
+           
+
+            t = 0f;
+            startOrthoSize = camera.orthographicSize;
+
+            // Zoom back in
+            while (t < 1)
+            {
+                t += Time.deltaTime * zoomSpeed;
+                camera.orthographicSize = Mathf.Lerp(startOrthoSize, zoomLevelData[currentLevelIndex], t);
+                yield return null;
+            }
+
+            Debug.Log("Transition Finished");
+            currentLevelIndex++;
+            playerController.FreezePlayer(false);
+            levelTransitionFinishedEvent.Raise();
+            inTransition = false;
         }
     }
 }

@@ -24525,7 +24525,7 @@ MonoBehaviour:
   enemySprite: {fileID: 1014755609354268214}
   explodeOnDeath: 1
   maxHealth: 100
-  explosionRadius: 5
+  explosionRadius: 2
   explosionDamage: 20
 --- !u!1 &6135846233284654776
 GameObject:
