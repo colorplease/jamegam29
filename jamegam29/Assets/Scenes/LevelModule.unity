@@ -1752,7 +1752,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   duration: 1
-  intensifier: 0
+  intensifier: 1
   startPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &884029406 stripped
 MonoBehaviour:
@@ -2858,14 +2858,32 @@ MonoBehaviour:
     bulletForce: 20
     fireRate: 6
     gunSprite: {fileID: 21300000, guid: b3fdbbec7a109ad44ac62dddcd644452, type: 3}
-    shakeDuration: 0
+    shakeDuration: 0.1
     curve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    intensifier: 0
+    intensifier: 1
     bulletType: {fileID: 8115362602949084708, guid: 19f767a0acfb0f54d8ad87aca932ada5, type: 3}
   - gunName: 
     gunSize: {x: 0.85, y: 0.85}
@@ -2874,15 +2892,33 @@ MonoBehaviour:
     bulletForce: 35
     fireRate: 2
     gunSprite: {fileID: 21300000, guid: 50b14c682c1459e439a3bcc4363b1819, type: 3}
-    shakeDuration: 0
+    shakeDuration: 0.1
     curve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.9952698
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1.0041809
+        value: 0.0047187805
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    intensifier: 0
-    bulletType: {fileID: 0}
+    intensifier: 1
+    bulletType: {fileID: 8115362602949084708, guid: d66ca5e02f2211d4cb086884a7342de8, type: 3}
   - gunName: 
     gunSize: {x: 0.79, y: 1.476692}
     firePointLocation: {x: -6.08, y: 0.36}
@@ -2890,15 +2926,33 @@ MonoBehaviour:
     bulletForce: 50
     fireRate: 0.5
     gunSprite: {fileID: 21300000, guid: 5288e6b3400338c41bd852698aeaa823, type: 3}
-    shakeDuration: 0
+    shakeDuration: 0.02
     curve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: -0.0041656494
+        value: 1.0023499
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1.0083313
+        value: 0.002357483
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    intensifier: 0
-    bulletType: {fileID: 0}
+    intensifier: 1
+    bulletType: {fileID: 8115362602949084708, guid: d260749cf53d7bc4cb5b21e03badc0c1, type: 3}
   gunNumber: 0
   crosshair: {fileID: 757421889}
   screenShake: {fileID: 831319207}
@@ -3540,6 +3594,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 949927547391691321, guid: cc5214849568c7840b9243756f0c85e3, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1520952484417377621, guid: cc5214849568c7840b9243756f0c85e3, type: 3}
+      propertyPath: m_Size.x
+      value: 0.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 1606269242756156901, guid: cc5214849568c7840b9243756f0c85e3, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2231273441393677091, guid: cc5214849568c7840b9243756f0c85e3, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -3591,6 +3657,10 @@ PrefabInstance:
     - target: {fileID: 3424343493468393896, guid: cc5214849568c7840b9243756f0c85e3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3754800816235162335, guid: cc5214849568c7840b9243756f0c85e3, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5402029635262586671, guid: cc5214849568c7840b9243756f0c85e3, type: 3}
       propertyPath: m_Name
