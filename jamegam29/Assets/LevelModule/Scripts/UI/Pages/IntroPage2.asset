@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8327f962c527492cb74b77dc1b15308c, type: 3}
+  m_Name: IntroPage2
+  m_EditorClassIdentifier: 
+  pageImage: {fileID: 21300000, guid: 5111ca53d14fe0c41b98ffeb4a1ccbae, type: 3}
+  pageText: "But now, Jack needs funds in order to support his brand new startup
+    company, FishCorp, and he doesn\u2019t have the patience to get a job or settle
+    with a board of investors. So he takes one of his mother\u2019s cows and trades
+    with a mysterious man for a sack of magical beans to grow another beanstalk in
+    the sky. However, while leaving the castle, Jack is caught red-handed by the
+    giant\u2019s son.  "

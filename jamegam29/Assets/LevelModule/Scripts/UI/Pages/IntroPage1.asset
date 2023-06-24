@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8327f962c527492cb74b77dc1b15308c, type: 3}
+  m_Name: IntroPage1
+  m_EditorClassIdentifier: 
+  pageImage: {fileID: 21300000, guid: 7b6f717a7dfa53942852ac1e33ff8027, type: 3}
+  pageText: "A young boy named Jack had grown a beanstalk a few months ago and gained
+    access to a giant\u2019s castle in the sky. He took advantage of the giant\u2019s
+    wife\u2019s kindness in order to steal treasures from the giant, and help his
+    widow mother. Jack was caught by the giant one day, and forced to cut down the
+    beanstalk while being chased, killing the giant. "
