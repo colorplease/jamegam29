@@ -117,28 +117,62 @@ namespace LevelModule.Scripts.Enemy
             DetectCollisions();
             
             // Calculate the direction towards the player
-            Vector2 direction = (player.transform.position - transform.position).normalized;
-
-            // Calculate the desired angle of rotation
-            float targetAngle = Mathf.Atan2(-direction.y, direction.x) * Mathf.Rad2Deg;
-
-            // Clamp the target angle to be within 90 and -90 degrees
-            targetAngle = Mathf.Clamp(targetAngle, -45f, 45f);
-
-            // Create a Quaternion representing the target rotation
-            Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
-
-            // Smoothly rotate towards the target rotation
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            Vector2 rotationDirection = (player.transform.position - transform.position).normalized;
+            Vector2 shootDirection = transform.right;
+            
             
             // Flip the sprite if player is on the other side
             if (player.transform.position.x > transform.position.x)
             {
                 _spriteRenderer.flipX = false;
+                shootDirection = transform.right;
             }
             else if (player.transform.position.x < transform.position.x)
             {
                 _spriteRenderer.flipX = true;
+                shootDirection = -transform.right;
+            }
+            
+            // Get direction to player
+            Vector2 directionToPlayer = player.transform.position - transform.position;
+
+            // Get the target angle
+            float targetAngle = Mathf.Atan2(directionToPlayer.y, directionToPlayer.x) * Mathf.Rad2Deg;
+            
+            // If sprite is initially flipped, we need to adjust our calculations
+            if(_spriteRenderer.flipX)
+            {
+                targetAngle -= 180;
+            }
+
+            // Smoothly rotate towards the target
+            float smoothedAngle = Mathf.LerpAngle(transform.eulerAngles.z, targetAngle, Time.deltaTime * rotationSpeed);
+        
+            // Apply the rotation
+            transform.rotation = Quaternion.Euler(0f, 0f, smoothedAngle);
+
+            // Check and handle sprite flip
+            if (_spriteRenderer.flipX)
+            {
+                if ((targetAngle > -90 && targetAngle < 90) && !_spriteRenderer.flipY)
+                {
+                    _spriteRenderer.flipY = true;
+                }
+                else if ((targetAngle < -90 || targetAngle > 90) && _spriteRenderer.flipY)
+                {
+                    _spriteRenderer.flipY = false;
+                }
+            }
+            else
+            {
+                if ((targetAngle > 90 || targetAngle < -90) && !_spriteRenderer.flipY)
+                {
+                    _spriteRenderer.flipY = true;
+                }
+                else if ((targetAngle < 90 && targetAngle > -90) && _spriteRenderer.flipY)
+                {
+                    _spriteRenderer.flipY = false;
+                }
             }
 
             
@@ -146,10 +180,10 @@ namespace LevelModule.Scripts.Enemy
                 return;
             
             GameObject note = ProjectilePooler.Instance.GetMusicalNote();
-            note.transform.position = projectileSpawnPosition.position;
+            note.transform.position = transform.position;
             note.SetActive(true);
             
-            note.GetComponent<EnemyProjectile>().InitializeProjectile(direction, enemyData.rangeAttackDamage,EnemyProjectile.ProjectileType.MusicalNote);
+            note.GetComponent<EnemyProjectile>().InitializeProjectile(shootDirection, enemyData.rangeAttackDamage,EnemyProjectile.ProjectileType.MusicalNote);
 
             StartCoroutine(Co_Cooldown());
         }
