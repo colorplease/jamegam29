@@ -192,17 +192,28 @@ namespace LevelModule.Scripts.Enemy
         {
             DetectCollisions();
             
+            Vector2 shootDirection = transform.right;
+            // Flip the sprite if player is on the other side
+            if (player.transform.position.x > transform.position.x)
+            {
+                _spriteRenderer.flipX = false;
+                shootDirection = transform.right;
+            }
+            else if (player.transform.position.x < transform.position.x)
+            {
+                _spriteRenderer.flipX = true;
+                shootDirection = -transform.right;
+            }
+            
             if (_isCoolingDown)
                 return;
             
-            // Lobs golden eggs at the player
-            var direction =  _spriteRenderer.flipX ? -transform.right : transform.right;
           
             GameObject egg = ProjectilePooler.Instance.GetEgg();
-            egg.transform.position = projectileSpawnPosition.position;
+            egg.transform.position = transform.position;
             egg.SetActive(true);
             
-            egg.GetComponent<EnemyProjectile>().InitializeProjectile(direction, enemyData.rangeAttackDamage,EnemyProjectile.ProjectileType.Egg);
+            egg.GetComponent<EnemyProjectile>().InitializeProjectile(shootDirection, enemyData.rangeAttackDamage,EnemyProjectile.ProjectileType.Egg);
             
             StartCoroutine(Co_Cooldown());
         }

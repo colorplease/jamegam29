@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace LevelModule.Scripts.Projectile
 {
@@ -47,9 +48,27 @@ namespace LevelModule.Scripts.Projectile
 
             if (projectileType == ProjectileType.Egg)
             {
-                // Set the initial force to apply to the Rigidbody2D to move the projectile
-                Vector2 initialForce = new Vector2(direction.x * speed, verticalSpeed);
+                // Define a min and max strength
+                float minStrength = 0.5f;
+                float maxStrength = 1.5f;
+
+                // Generate a random strength
+                float randomStrength = Random.Range(minStrength, maxStrength);
+
+                // Apply the random strength to your initial force
+                Vector2 initialForce = new Vector2(direction.x * speed * randomStrength, verticalSpeed * randomStrength);
+
                 rb.AddForce(initialForce, ForceMode2D.Impulse);
+                
+                // Define a min and max spin
+                float minSpin = -360f;  // Negative for counterclockwise spin
+                float maxSpin = 360f;   // Positive for clockwise spin
+
+                // Generate a random spin
+                float randomSpin = Random.Range(minSpin, maxSpin);
+
+                // Apply the random spin
+                rb.angularVelocity = randomSpin;
             }
             isInitialized = true;
         }
