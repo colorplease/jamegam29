@@ -89,6 +89,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]float sexyFreezeDuration;
     [SerializeField]GameObject sexyFlash;
     [SerializeField]UnityEngine.Rendering.Universal.Light2D sexyLight;
+    Coroutine crossHairCoroutine;
+    Coroutine trailCoroutine;
      //used to resume aiming if enemy is out of line of sight
 
 
@@ -188,7 +190,7 @@ public class PlayerController : MonoBehaviour
             {
                 //turns on crosshair animation, visible to screen
                 crosshair.SetBool("byebye", true);
-                StartCoroutine(crossHair());
+                crossHairCoroutine = StartCoroutine(crossHair());
                 heymaImdoingmyAbilityHere = true;
             }
             
@@ -206,7 +208,6 @@ public class PlayerController : MonoBehaviour
                     RaycastHit2D hit = Physics2D.Raycast(testFire.position, whereisEnemy, 99999, sniperAbilityMask);
                     if(hit.collider.tag == "Enemy")
                     {
-                        print("hi guys");
                         enemiesicanshoot.Add(angleSniperFire);
                         enemiesicanshootDistance.Add(Vector3.Distance(transform.position, hit.transform.position));
                         
@@ -215,7 +216,7 @@ public class PlayerController : MonoBehaviour
                 }
                 float[] enemiesicanshootDistanceArray = enemiesicanshootDistance.ToArray();
                 float[] enemiesicanshootArray = enemiesicanshoot.ToArray();
-                if(enemiesicanshootDistanceArray[0] != null)
+                if(enemiesicanshootDistanceArray.Length > 0)
                 {
                     gun.rotation = Quaternion.Euler(0, 0, enemiesicanshoot[GetIndexOfLowestValue(enemiesicanshootDistanceArray)] - 90);
                     GameObject bullet = Instantiate(guns[gunNumber].bulletType, firePoint.position, firePoint.rotation);
@@ -227,6 +228,10 @@ public class PlayerController : MonoBehaviour
                     sexyFlash.SetActive(true);
                     Time.timeScale = 0;
                     StartCoroutine(sexyFreeze());   
+                }
+                else
+                {
+                    Debug.Log("ha");
                 }
  
 
@@ -251,8 +256,8 @@ public class PlayerController : MonoBehaviour
             if(gunNumber == 1 && heymaImdoingmyAbilityHere == true && !_isGun1OnCooldown)
             {
                 //stops the crosshair coroutine for the bullet time, removes the crosshair, resets the player velocity, and resumes normal time
-                StopAllCoroutines();
-                StartCoroutine(trail());
+                StopCoroutine(crossHairCoroutine);
+                trailCoroutine = StartCoroutine(trail());
                 crosshair.SetBool("byebye", false);
                 rigid.velocity = Vector2.zero;
                 transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
@@ -369,7 +374,7 @@ public class PlayerController : MonoBehaviour
         //switches gun number and edits the gun object on the player to match using the gun[]
         if(Input.GetKeyDown(KeyCode.W))
         {
-            if(gunNumber < guns.Length - 1)
+            if(gunNumber < guns.Length - 2)
             {
                 gunNumber++;
             }
@@ -384,7 +389,14 @@ public class PlayerController : MonoBehaviour
 
             //stops shotgun ability
             //stops the crosshair coroutine for the bullet time, removes the crosshair, resets the player velocity, and resumes normal time
-                StopAllCoroutines();
+            if(trailCoroutine != null)
+            {
+                StopCoroutine(trailCoroutine);
+            }
+            if(crossHairCoroutine != null)
+            {
+                StopCoroutine(crossHairCoroutine);
+            }   
                 TrailRenderer wheredidigoTrail = GetComponent<TrailRenderer>();
                 wheredidigoTrail.enabled = false;
                 crosshair.SetBool("byebye", false);
