@@ -5,6 +5,7 @@ using LevelModule.Scripts.AbilityData;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+
 [System.Serializable]
 public class guns
 {
@@ -82,6 +83,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField]bool heymaImdoingmyAbilityHere; //check when player is mid ability
     [SerializeField]Transform testFire; //used for sniper ability to check whether enemy is in line of sight //point where raycast fires
     [SerializeField]LayerMask sniperAbilityMask;
+    [SerializeField]List<float> enemiesicanshoot;
+    [SerializeField]List<float> enemiesicanshootDistance;
+    float angleSniperFire;
+    [SerializeField]float sexyFreezeDuration;
+    [SerializeField]GameObject sexyFlash;
+    [SerializeField]UnityEngine.Rendering.Universal.Light2D sexyLight;
      //used to resume aiming if enemy is out of line of sight
 
 
@@ -99,6 +106,12 @@ public class PlayerController : MonoBehaviour
     private int gun1AbilityChargeCount;
     private int gun2AbilityChargeCount;
     private int gun3AbilityChargeCount;
+
+    [Header("Music Stuff Idk")]
+    public AudioSource mainAudio;
+    public AudioClip[] audioClips;
+    public float SFXVolume;
+    public float MusicVolume;
     
     public enum GunType
     {
@@ -146,6 +159,21 @@ public class PlayerController : MonoBehaviour
         Aiming();        
     }
 
+    public int GetIndexOfLowestValue(float[] arr)
+    {
+        float value = float.PositiveInfinity;
+        int index = -1;
+        for(int i = 0; i < arr.Length; i++)
+        {
+            if(arr[i] < value)
+            {
+                index = i;
+                value = arr[i];
+            }
+        }
+        return index;
+    }
+
     void Ability()
     {
 
@@ -167,27 +195,41 @@ public class PlayerController : MonoBehaviour
             //sniper
             if(gunNumber == 2 && !_isGun2OnCooldown)
             {
+                enemiesicanshoot.Clear();
+                enemiesicanshootDistance.Clear();
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
                 for(int i = 0; i<enemies.Length; i++)
                 {
                     Vector2 whereisEnemy = new Vector2(enemies[i].transform.position.x, enemies[i].transform.position.y) - rigid.position;
-                    float angle = Mathf.Atan2(whereisEnemy.y, whereisEnemy.x) * Mathf.Rad2Deg - 90;
-                    testFire.rotation = Quaternion.Euler(testFire.rotation.x, testFire.rotation.y, angle);
+                    angleSniperFire = Mathf.Atan2(whereisEnemy.y, whereisEnemy.x) * Mathf.Rad2Deg - 90;
+                    testFire.rotation = Quaternion.Euler(testFire.rotation.x, testFire.rotation.y, angleSniperFire);
                     RaycastHit2D hit = Physics2D.Raycast(testFire.position, whereisEnemy, 99999, sniperAbilityMask);
-                    Debug.DrawRay(testFire.position, whereisEnemy, Color.red);
                     if(hit.collider.tag == "Enemy")
                     {
                         print("hi guys");
-                        gun.rotation = Quaternion.Euler(0, 0, angle - 90);
-                        GameObject bullet = Instantiate(guns[gunNumber].bulletType, firePoint.position, firePoint.rotation);
-                        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                        bullet.GetComponent<PlayerBullet>().InitiializeBullet(guns[gunNumber].gunDamage);
-                        rb.AddForce(-firePoint.right * guns[gunNumber].bulletForce, ForceMode2D.Impulse);
-                        screenShake.ShakeShake(guns[gunNumber].shakeDuration, guns[gunNumber].curve, guns[gunNumber].intensifier);
-                        break;
+                        enemiesicanshoot.Add(angleSniperFire);
+                        enemiesicanshootDistance.Add(Vector3.Distance(transform.position, hit.transform.position));
+                        
                     }
                     
                 }
+                float[] enemiesicanshootDistanceArray = enemiesicanshootDistance.ToArray();
+                float[] enemiesicanshootArray = enemiesicanshoot.ToArray();
+                if(enemiesicanshootDistanceArray[0] != null)
+                {
+                    gun.rotation = Quaternion.Euler(0, 0, enemiesicanshoot[GetIndexOfLowestValue(enemiesicanshootDistanceArray)] - 90);
+                    GameObject bullet = Instantiate(guns[gunNumber].bulletType, firePoint.position, firePoint.rotation);
+                    Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+                    bullet.GetComponent<PlayerBullet>().InitiializeBullet(guns[3].gunDamage);
+                    rb.AddForce(-firePoint.right * guns[3].bulletForce, ForceMode2D.Impulse);
+                    screenShake.ShakeShake(guns[3].shakeDuration, guns[3].curve, guns[3].intensifier);
+                    sexyLight.intensity = 0;
+                    sexyFlash.SetActive(true);
+                    Time.timeScale = 0;
+                    StartCoroutine(sexyFreeze());   
+                }
+ 
+
             }
             
            
@@ -248,6 +290,15 @@ public class PlayerController : MonoBehaviour
             
            
         }
+    }
+
+    IEnumerator sexyFreeze()
+    {
+        yield return new WaitForSecondsRealtime(sexyFreezeDuration);
+        Time.timeScale = 1;
+        sexyLight.intensity = 1;
+        sexyFlash.SetActive(false);
+        mainAudio.PlayOneShot(audioClips[0], SFXVolume);
     }
 
     private IEnumerator Co_GunAbilityCooldown(GunType gunType)
