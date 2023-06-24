@@ -216,7 +216,7 @@ public class PlayerController : MonoBehaviour
                 }
                 float[] enemiesicanshootDistanceArray = enemiesicanshootDistance.ToArray();
                 float[] enemiesicanshootArray = enemiesicanshoot.ToArray();
-                if(enemiesicanshootDistanceArray.Length > 1)
+                if(enemiesicanshootDistanceArray.Length > 0)
                 {
                     gun.rotation = Quaternion.Euler(0, 0, enemiesicanshoot[GetIndexOfLowestValue(enemiesicanshootDistanceArray)] - 90);
                     GameObject bullet = Instantiate(guns[gunNumber].bulletType, firePoint.position, firePoint.rotation);
