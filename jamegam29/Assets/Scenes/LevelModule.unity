@@ -4265,7 +4265,7 @@ MonoBehaviour:
     m_Bits: 264
   enemiesicanshoot: []
   enemiesicanshootDistance: []
-  sexyFreezeDuration: 0.15
+  sexyFreezeDuration: 0.25
   sexyFlash: {fileID: 1781696282}
   sexyLight: {fileID: 619394801}
   _abilityUIHandler: {fileID: 961662260}
