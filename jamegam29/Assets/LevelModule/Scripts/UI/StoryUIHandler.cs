@@ -10,22 +10,25 @@ namespace LevelModule.Scripts.UI
     public class StoryUIHandler : MonoBehaviour
     {
         [SerializeField] private CanvasGroup pageCanvasGroup;
-        [SerializeField] private Button nextButton;
         [SerializeField] private Image pageImageRef;
         [SerializeField] private TextMeshProUGUI pageText;
         [SerializeField] private List<PageData> pageData;
+        [SerializeField] CanvasGroup nextButton;
+
+        [SerializeField]float scrollSpeed;
     
         private CanvasGroup activePage;
     
         private int storyIndex;
         private int numberOfPages;
+        bool finishedTyping;
     
         // Start is called before the first frame update
         private void Start()
         {
             numberOfPages = pageData.Count;
-            nextButton.interactable = false;
             ShowPage();
+            finishedTyping = false;
         }
     
         private void ShowPage()
@@ -33,7 +36,10 @@ namespace LevelModule.Scripts.UI
             pageImageRef.sprite = pageData[storyIndex].pageImage;
             pageCanvasGroup.DOFade(1, 0.5f).SetEase(Ease.Flash).OnComplete(() =>
             {
-                StartCoroutine(PlayText());
+                if(!finishedTyping)
+                {
+                    StartCoroutine(PlayText());
+                }
             });
         }
     
@@ -42,23 +48,32 @@ namespace LevelModule.Scripts.UI
             foreach (char c in pageData[storyIndex].pageText) 
             {
                 pageText.text += c;
-                yield return new WaitForSeconds (0.03f);
+                yield return new WaitForSeconds (scrollSpeed);
             }
 
-            nextButton.interactable = true;
+            finishedTyping = true;
         }
 
         public void ButtonEvt_Next()
         {
-            storyIndex++;
+            if(finishedTyping)
+            {
+                storyIndex++;
             pageText.text = "";
-            
-            nextButton.interactable = false;
+            finishedTyping = false;
         
             if(storyIndex == numberOfPages)
-                gameObject.SetActive(false);
+                pageCanvasGroup.DOFade(0, 0.5f).SetEase(Ease.Flash);
+                nextButton.DOFade(0, 0.5f).SetEase(Ease.Flash);
         
             pageCanvasGroup.DOFade(0, 0.5f).SetEase(Ease.Flash).OnComplete(ShowPage);
+            }
+            else
+            {
+                StopAllCoroutines();
+                finishedTyping = true;
+                pageText.SetText(pageData[storyIndex].pageText);
+            }
         }
     }
 }
