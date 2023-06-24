@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using GameEvents;
 using LevelModule.Scripts.Enemy;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace LevelModule.Scripts
     public class EnemyHealthHandler : MonoBehaviour, IDamageable
     {
         [SerializeField] private EnemyHealthBarHandler _enemyHealthBarHandler;
+        [SerializeField] private GameEvent killConfirmedEvent;
         [SerializeField] private GameObject explosionVFX;
         [SerializeField] private SpriteRenderer enemySprite;
         
@@ -21,7 +23,6 @@ namespace LevelModule.Scripts
         private void Start()
         {
             currentHealth = maxHealth; // Start with full health
-            _isAlive = true;
         }
         
         public void TakeDamage(int damage)
@@ -42,6 +43,7 @@ namespace LevelModule.Scripts
 
         private void Die()
         {
+            killConfirmedEvent.Raise();
             // Instantiate the explosion effect when this enemy dies
             if (explodeOnDeath)
             {
@@ -86,6 +88,11 @@ namespace LevelModule.Scripts
         public bool IsAlive()
         {
             return _isAlive;
+        }
+
+        public void Initialize()
+        {
+            _isAlive = true;
         }
     }
 }

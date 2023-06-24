@@ -18,7 +18,12 @@ namespace LevelModule.Scripts.Enemy
             
         }
 
-        public EnemyData enemyData;
+        public EnemyData harpData;
+        public EnemyData goldenGooseData;
+        public EnemyData soyFishData;
+        public EnemyData beanStalkData;
+        
+        private EnemyData enemyData;
         
         public Transform projectileSpawnPosition;
 
@@ -63,6 +68,28 @@ namespace LevelModule.Scripts.Enemy
             player = GameObject.FindWithTag("Player");
         }
 
+        public void InitializeEnemy(EnemyType enemyType)
+        {
+            switch (enemyType)
+            {
+                case EnemyType.Harp:
+                    enemyData = harpData;
+                    break;
+                case EnemyType.SoyFish:
+                    enemyData = soyFishData;
+                    break;
+                case EnemyType.GoldenGoose:
+                    enemyData = goldenGooseData;
+                    break;
+                case EnemyType.BeanstalkTendrils:
+                    enemyData = beanStalkData;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(enemyType), enemyType, null);
+            }
+            enemyHealthHandler.Initialize();
+        }
+
         private void Update()
         {
             if (!enemyHealthHandler.IsAlive() || isFrozen)
@@ -89,8 +116,23 @@ namespace LevelModule.Scripts.Enemy
         {
             DetectCollisions();
             
+            // If the player is facing right (i.e., player's scale.x is positive)...
+            if (player.transform.localScale.x > 0)
+            {
+                // ...set the sprite to face right
+                _spriteRenderer.flipX = true;
+            }
+            // Otherwise, if the player is facing left (i.e., player's scale.x is negative)...
+            else if (player.transform.localScale.x < 0)
+            {
+                // ...set the sprite to face left
+                _spriteRenderer.flipX = false;
+            }
+            
             if (_isCoolingDown)
                 return;
+            
+           
             
             // Spits music notes at you
             // This could be more complex depending on your projectile system
@@ -150,10 +192,10 @@ namespace LevelModule.Scripts.Enemy
                 if (hit.CompareTag("Player"))
                 {
                     // ...and if so, deal damage to it
-                    // Knock the player back
-                    Vector3 knockBackDirection = (hit.transform.position - transform.position).normalized;
-                    Vector3 knockBackTarget = hit.transform.position + knockBackDirection * enemyData.knockBackDistance;
-                    hit.transform.DOMove(knockBackTarget, enemyData.knockBackDuration);
+                    // // Knock the player back
+                    // Vector3 knockBackDirection = (hit.transform.position - transform.position).normalized;
+                    // Vector3 knockBackTarget = hit.transform.position + knockBackDirection * enemyData.knockBackDistance;
+                    // hit.transform.DOMove(knockBackTarget, enemyData.knockBackDuration);
                     hit.GetComponent<PlayerHealthHandler>().TakeDamage(enemyData.meleeAttackDamage);
                 }
             }

@@ -17,7 +17,7 @@ MonoBehaviour:
   rangeAttackDamage: 1
   rangeAttackCooldown: 1
   meleeAttackDamage: 10
-  meleeAttackRadius: 1
+  meleeAttackRadius: 0.5
   knockBackDistance: 1
   knockBackDuration: 0.25
   moveSpeed: 1

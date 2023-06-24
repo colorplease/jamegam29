@@ -1,6 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using LevelModule.Scripts.AbilityData;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 [System.Serializable]
 public class guns
 {
@@ -81,7 +85,27 @@ public class PlayerController : MonoBehaviour
     bool lockedOn; //used to resume aiming if enemy is out of line of sight
 
 
+    [Header("Ability Data")] 
+    [SerializeField] private AbilityUIHandler _abilityUIHandler;
+    [SerializeField] private AbilityData gun1AbilityData;
+    [SerializeField] private AbilityData gun2AbilityData;
+    [SerializeField] private AbilityData gun3AbilityData;
+    
     private bool _isFrozen;
+    private bool _isGun1OnCooldown;
+    private bool _isGun2OnCooldown;
+    private bool _isGun3OnCooldown;
+
+    private int gun1AbilityChargeCount;
+    private int gun2AbilityChargeCount;
+    private int gun3AbilityChargeCount;
+    
+    public enum GunType
+    {
+        Gun1,
+        Gun2,
+        Gun3
+    }
 
     void Start()
     {
@@ -92,7 +116,12 @@ public class PlayerController : MonoBehaviour
         firePoint.localPosition = new Vector3(guns[gunNumber].firePointLocation.x, guns[gunNumber].firePointLocation.y, firePoint.position.z);
         gun.localScale = new Vector3(guns[gunNumber].gunSize.x, guns[gunNumber].gunSize.y, firePoint.position.z);
         gun.GetComponent<SpriteRenderer>().sprite = guns[gunNumber].gunSprite;
-	}
+        
+        // Set up ability
+        gun1AbilityChargeCount = gun1AbilityData.abilityCharges;
+        gun2AbilityChargeCount = gun2AbilityData.abilityCharges;
+        gun3AbilityChargeCount = gun3AbilityData.abilityCharges;
+    }
 
 	
 	void Update()
@@ -127,25 +156,26 @@ public class PlayerController : MonoBehaviour
 
 
             //shotgun
-            if(gunNumber == 1)
+            if(gunNumber == 1 && !_isGun1OnCooldown)
             {
                 //turns on crosshair animation, visible to screen
                 crosshair.SetBool("byebye", true);
                 StartCoroutine(crossHair());
+                heymaImdoingmyAbilityHere = true;
             }
-            heymaImdoingmyAbilityHere = true;
+           
             
         }
         if(Input.GetKey(KeyCode.Mouse1))
         {
-            if(gunNumber == 1)
+            if(gunNumber == 1 && !_isGun1OnCooldown)
             {
                 //follows mouse position and activates trail renderer
                 crosshair.transform.position = new Vector3(mousePos.x, mousePos.y, crosshair.transform.position.z);
                 TrailRenderer wheredidigoTrail = GetComponent<TrailRenderer>();
                 wheredidigoTrail.enabled = true;
             }
-            if(gunNumber == 2)
+            if(gunNumber == 2 && !_isGun2OnCooldown)
             {
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
                 for(int i = 0; i<enemies.Length; i++)
@@ -170,7 +200,7 @@ public class PlayerController : MonoBehaviour
         }
         if(Input.GetKeyUp(KeyCode.Mouse1))
         {
-            if(gunNumber == 1 && heymaImdoingmyAbilityHere == true)
+            if(gunNumber == 1 && heymaImdoingmyAbilityHere == true && !_isGun1OnCooldown)
             {
                 //stops the crosshair coroutine for the bullet time, removes the crosshair, resets the player velocity, and resumes normal time
                 StopAllCoroutines();
@@ -179,14 +209,91 @@ public class PlayerController : MonoBehaviour
                 rigid.velocity = Vector2.zero;
                 transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
                 Time.timeScale = 1f;
+                gun1AbilityChargeCount--;
+
+                if (gun1AbilityChargeCount == 0)
+                {
+                    StartCoroutine(Co_GunAbilityCooldown(GunType.Gun1));
+                    heymaImdoingmyAbilityHere = false;
+                }
             }
-            if(gunNumber == 2 && heymaImdoingmyAbilityHere == true)
+            if(gunNumber == 2 && heymaImdoingmyAbilityHere == true && !_isGun2OnCooldown)
             {
                 lockedOn = false;
+                gun2AbilityChargeCount--;
                 
+                if (gun2AbilityChargeCount == 0)
+                {
+                    StartCoroutine(Co_GunAbilityCooldown(GunType.Gun2));
+                    heymaImdoingmyAbilityHere = false;
+                }
+
             }
-            heymaImdoingmyAbilityHere = false;
+            
+            if(gunNumber == 3 && heymaImdoingmyAbilityHere == true && !_isGun3OnCooldown)
+            {
+                lockedOn = false;
+                gun2AbilityChargeCount--;
+                
+                if (gun3AbilityChargeCount == 0)
+                {
+                    StartCoroutine(Co_GunAbilityCooldown(GunType.Gun3));
+                    heymaImdoingmyAbilityHere = false;
+                }
+            }
+            
+           
         }
+    }
+
+    private IEnumerator Co_GunAbilityCooldown(GunType gunType)
+    {
+        float coolDownTime = 0f;
+
+        switch (gunType)
+        {
+            case GunType.Gun1:
+                coolDownTime = gun1AbilityData.abilityCooldown;
+                _isGun1OnCooldown = true;
+                break;
+            case GunType.Gun2:
+                coolDownTime = gun2AbilityData.abilityCooldown;
+                _isGun2OnCooldown = true;
+                break;
+            case GunType.Gun3:
+                coolDownTime = gun3AbilityData.abilityCooldown;
+                _isGun3OnCooldown = false;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(gunType), gunType, null);
+        }
+
+        while (coolDownTime > 0)
+        {
+            coolDownTime -= Time.deltaTime;
+            Debug.Log("Cooldown time: " + coolDownTime);
+            _abilityUIHandler.UpdateAbilityIcon(coolDownTime, gunType);
+            yield return null;
+        }
+
+
+        _abilityUIHandler.ResetIcon(gunType);
+        switch (gunType)
+        {
+            case GunType.Gun1:
+                _isGun1OnCooldown = false;
+                gun1AbilityChargeCount = gun1AbilityData.abilityCharges;
+                break;
+            case GunType.Gun2:
+                _isGun2OnCooldown = false;
+                gun2AbilityChargeCount = gun2AbilityData.abilityCharges;
+                break;
+            case GunType.Gun3:
+                _isGun3OnCooldown = false;
+                gun3AbilityChargeCount = gun3AbilityData.abilityCharges;
+                break;
+        }
+        
     }
 
     IEnumerator crossHair()

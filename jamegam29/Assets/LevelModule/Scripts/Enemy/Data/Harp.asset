@@ -15,7 +15,9 @@ MonoBehaviour:
   enemyType: 0
   projectilePrefab: {fileID: 266657351013359808, guid: 677c58b012b8be44e9ca3f58403e33f2, type: 3}
   rangeAttackDamage: 10
-  meleeAttackDamage: 1
-  meleeAttackRadius: 1
   rangeAttackCooldown: 1
+  meleeAttackDamage: 1
+  meleeAttackRadius: 0.5
+  knockBackDistance: 1
+  knockBackDuration: 0.25
   moveSpeed: 1
