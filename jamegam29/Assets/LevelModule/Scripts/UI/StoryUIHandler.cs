@@ -10,37 +10,52 @@ namespace LevelModule.Scripts.UI
     public class StoryUIHandler : MonoBehaviour
     {
         [SerializeField] private CanvasGroup pageCanvasGroup;
+        [SerializeField] private Button nextButton;
         [SerializeField] private Image pageImageRef;
         [SerializeField] private TextMeshProUGUI pageText;
         [SerializeField] private List<PageData> pageData;
-        [SerializeField] CanvasGroup nextButton;
-
-        [SerializeField]float scrollSpeed;
     
         private CanvasGroup activePage;
+        
+        private Vector2 originalPosition; // The original position of the image
+        private float originalAlpha; // The original alpha of the image
     
         private int storyIndex;
         private int numberOfPages;
-        bool finishedTyping;
     
         // Start is called before the first frame update
         private void Start()
         {
             numberOfPages = pageData.Count;
+            nextButton.interactable = false;
+            
+            // Store the original position and alpha of the image
+            originalPosition = pageImageRef.rectTransform.anchoredPosition;
+            originalAlpha = pageImageRef.color.a;
+
             ShowPage();
-            finishedTyping = false;
         }
     
         private void ShowPage()
         {
+            
             pageImageRef.sprite = pageData[storyIndex].pageImage;
-            pageCanvasGroup.DOFade(1, 0.5f).SetEase(Ease.Flash).OnComplete(() =>
+            
+            // Create a sequence to combine multiple tweens
+            Sequence sequence = DOTween.Sequence();
+
+            // Add a tween to the sequence to slide the image up
+            sequence.Append(pageImageRef.rectTransform.DOAnchorPosY(pageImageRef.rectTransform.anchoredPosition.y + 100, 0.25f));
+
+            // Add a tween to the sequence to fade the image in
+            sequence.Join(pageImageRef.DOFade(1, 0.25f));
+
+            // Start the sequence
+            sequence.Play().OnComplete(() =>
             {
-                if(!finishedTyping)
-                {
-                    StartCoroutine(PlayText());
-                }
+                StartCoroutine(PlayText());
             });
+            
         }
     
         private IEnumerator PlayText()
@@ -48,32 +63,30 @@ namespace LevelModule.Scripts.UI
             foreach (char c in pageData[storyIndex].pageText) 
             {
                 pageText.text += c;
-                yield return new WaitForSeconds (scrollSpeed);
+                yield return new WaitForSeconds (0.02f);
             }
 
-            finishedTyping = true;
+            nextButton.interactable = true;
         }
 
         public void ButtonEvt_Next()
         {
-            if(finishedTyping)
-            {
-                storyIndex++;
+            storyIndex++;
             pageText.text = "";
-            finishedTyping = false;
+            
+            nextButton.interactable = false;
+            
+            // Return the image to its original position and alpha
+            pageImageRef.rectTransform.anchoredPosition = originalPosition;
+            pageImageRef.color = new Color(pageImageRef.color.r, pageImageRef.color.g, pageImageRef.color.b, originalAlpha);
+
         
             if(storyIndex == numberOfPages)
-                pageCanvasGroup.DOFade(0, 0.5f).SetEase(Ease.Flash);
-                nextButton.DOFade(0, 0.5f).SetEase(Ease.Flash);
+                gameObject.SetActive(false);
+            
+          
         
-            pageCanvasGroup.DOFade(0, 0.5f).SetEase(Ease.Flash).OnComplete(ShowPage);
-            }
-            else
-            {
-                StopAllCoroutines();
-                finishedTyping = true;
-                pageText.SetText(pageData[storyIndex].pageText);
-            }
+            ShowPage();
         }
     }
 }

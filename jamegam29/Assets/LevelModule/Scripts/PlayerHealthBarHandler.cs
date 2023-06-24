@@ -21,8 +21,13 @@ namespace LevelModule.Scripts
             healthTitleText.text = health.ToString();
             StartCoroutine(LerpFillAmount(health / 100f, 0.2f)); // 0.5f is the duration for the lerp, change as needed
             shake.ShakeShake(shakeDuration, curve, intensity);
-            GameObject blood = Instantiate(bloodHit, player.position, Quaternion.identity);
-            Destroy(blood, 5f);
+
+            if (bloodHit != null)
+            {
+                GameObject blood = Instantiate(bloodHit, player.position, Quaternion.identity);
+                Destroy(blood, 5f);
+            }
+          
         }
         
         private IEnumerator LerpFillAmount(float targetFill, float duration)

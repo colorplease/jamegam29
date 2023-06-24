@@ -18,6 +18,7 @@ namespace LevelModule.Scripts.Enemy
             
         }
 
+        public float rotationSpeed;
         public EnemyData harpData;
         public EnemyData goldenGooseData;
         public EnemyData soyFishData;
@@ -29,9 +30,6 @@ namespace LevelModule.Scripts.Enemy
 
         public GameEvent OnLevelTransitionEvent;
         public GameEvent OnLevelTransitionFinishedEvent;
-        
-      
-      
         
         private EnemyHealthHandler enemyHealthHandler;
         private SpriteRenderer _spriteRenderer;
@@ -49,6 +47,7 @@ namespace LevelModule.Scripts.Enemy
             enemyHealthHandler = GetComponent<EnemyHealthHandler>();
             _levelTransitionEventHandler = new LevelTransitionEventHandler(this);
             _levelTransitionFinishedEventHandler = new LevelTransitionFinishedEventHandler(this);
+            isFrozen = true;
         }
 
         private void OnEnable()
@@ -88,6 +87,7 @@ namespace LevelModule.Scripts.Enemy
                     throw new ArgumentOutOfRangeException(nameof(enemyType), enemyType, null);
             }
             enemyHealthHandler.Initialize();
+            isFrozen = false;
         }
 
         private void Update()
@@ -116,28 +116,35 @@ namespace LevelModule.Scripts.Enemy
         {
             DetectCollisions();
             
-            // If the player is facing right (i.e., player's scale.x is positive)...
-            if (player.transform.localScale.x > 0)
+            // Calculate the direction towards the player
+            Vector2 direction = (player.transform.position - transform.position).normalized;
+
+            // Calculate the desired angle of rotation
+            float targetAngle = Mathf.Atan2(-direction.y, direction.x) * Mathf.Rad2Deg;
+
+            // Clamp the target angle to be within 90 and -90 degrees
+            targetAngle = Mathf.Clamp(targetAngle, -45f, 45f);
+
+            // Create a Quaternion representing the target rotation
+            Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
+
+            // Smoothly rotate towards the target rotation
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            
+            // Flip the sprite if player is on the other side
+            if (player.transform.position.x > transform.position.x)
             {
-                // ...set the sprite to face right
-                _spriteRenderer.flipX = true;
-            }
-            // Otherwise, if the player is facing left (i.e., player's scale.x is negative)...
-            else if (player.transform.localScale.x < 0)
-            {
-                // ...set the sprite to face left
                 _spriteRenderer.flipX = false;
             }
+            else if (player.transform.position.x < transform.position.x)
+            {
+                _spriteRenderer.flipX = true;
+            }
+
             
             if (_isCoolingDown)
                 return;
             
-           
-            
-            // Spits music notes at you
-            // This could be more complex depending on your projectile system
-            var direction =  _spriteRenderer.flipX ? -transform.right : transform.right;
-
             GameObject note = ProjectilePooler.Instance.GetMusicalNote();
             note.transform.position = projectileSpawnPosition.position;
             note.SetActive(true);

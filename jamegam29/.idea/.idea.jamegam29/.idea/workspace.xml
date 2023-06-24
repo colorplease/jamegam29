@@ -19,9 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4e5c49f1-2cd7-4e45-a29d-d9c9d78a6e36" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.jamegam29/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.jamegam29/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="4e5c49f1-2cd7-4e45-a29d-d9c9d78a6e36" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,7 +29,8 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/LevelModule/UnityAssetStore/2D Platformer/Scripts/PlayerController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/LevelModule/Scripts/PlayerHealthBarHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/LevelModule/UnityAssetStore/2D Platformer/Scripts/PlayerUnityController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/LevelModule/Scripts/DebugLevelModule.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
