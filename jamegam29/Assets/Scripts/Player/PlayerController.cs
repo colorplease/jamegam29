@@ -80,9 +80,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]Animator crosshair; //drag in "crosshair hi guys" from the hierarchy
     [SerializeField]ScreenShake screenShake; //check the Main Camera and drag in ScreenShake
     [SerializeField]bool heymaImdoingmyAbilityHere; //check when player is mid ability
-    [SerializeField]Transform testFire; //used for sniper ability to check whether enemy is in line of sight
-    [SerializeField]Transform testFireTip; //point where raycast fires
-    bool lockedOn; //used to resume aiming if enemy is out of line of sight
+    [SerializeField]Transform testFire; //used for sniper ability to check whether enemy is in line of sight //point where raycast fires
+    [SerializeField]LayerMask sniperAbilityMask;
+     //used to resume aiming if enemy is out of line of sight
 
 
     [Header("Ability Data")] 
@@ -152,7 +152,7 @@ public class PlayerController : MonoBehaviour
         
         if(Input.GetKeyDown(KeyCode.Mouse1))
         {
-            //sniper
+            
 
 
             //shotgun
@@ -163,6 +163,33 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(crossHair());
                 heymaImdoingmyAbilityHere = true;
             }
+            
+            //sniper
+            if(gunNumber == 2 && !_isGun2OnCooldown)
+            {
+                GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+                for(int i = 0; i<enemies.Length; i++)
+                {
+                    Vector2 whereisEnemy = new Vector2(enemies[i].transform.position.x, enemies[i].transform.position.y) - rigid.position;
+                    float angle = Mathf.Atan2(whereisEnemy.y, whereisEnemy.x) * Mathf.Rad2Deg - 90;
+                    testFire.rotation = Quaternion.Euler(testFire.rotation.x, testFire.rotation.y, angle);
+                    RaycastHit2D hit = Physics2D.Raycast(testFire.position, whereisEnemy, 99999, sniperAbilityMask);
+                    Debug.DrawRay(testFire.position, whereisEnemy, Color.red);
+                    if(hit.collider.tag == "Enemy")
+                    {
+                        print("hi guys");
+                        gun.rotation = Quaternion.Euler(0, 0, angle - 90);
+                        GameObject bullet = Instantiate(guns[gunNumber].bulletType, firePoint.position, firePoint.rotation);
+                        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+                        bullet.GetComponent<PlayerBullet>().InitiializeBullet(guns[gunNumber].gunDamage);
+                        rb.AddForce(-firePoint.right * guns[gunNumber].bulletForce, ForceMode2D.Impulse);
+                        screenShake.ShakeShake(guns[gunNumber].shakeDuration, guns[gunNumber].curve, guns[gunNumber].intensifier);
+                        break;
+                    }
+                    
+                }
+            }
+            
            
             
         }
@@ -175,28 +202,7 @@ public class PlayerController : MonoBehaviour
                 TrailRenderer wheredidigoTrail = GetComponent<TrailRenderer>();
                 wheredidigoTrail.enabled = true;
             }
-            if(gunNumber == 2 && !_isGun2OnCooldown)
-            {
-                GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-                for(int i = 0; i<enemies.Length; i++)
-                {
-                    Vector2 whereisEnemy = new Vector2(enemies[i].transform.position.x, enemies[i].transform.position.y) - rigid.position;
-                    float angle = Mathf.Atan2(whereisEnemy.y, whereisEnemy.x) * Mathf.Rad2Deg - 90;
-                    testFire.rotation = Quaternion.Euler(testFire.rotation.x, testFire.rotation.y, angle);
-                    RaycastHit2D hit = Physics2D.Raycast(testFire.position, whereisEnemy);
-                    Debug.DrawRay(testFireTip.position, whereisEnemy, Color.red);
-                    if(hit.collider.tag == "Enemy")
-                    {
-                        gun.rotation = Quaternion.Euler(0, 0, angle - 90);
-                        lockedOn = true;
-                    }
-                    else
-                    {
-                        lockedOn = false;
-                    }
-                    
-                }
-            }
+            
         }
         if(Input.GetKeyUp(KeyCode.Mouse1))
         {
@@ -219,7 +225,6 @@ public class PlayerController : MonoBehaviour
             }
             if(gunNumber == 2 && heymaImdoingmyAbilityHere == true && !_isGun2OnCooldown)
             {
-                lockedOn = false;
                 gun2AbilityChargeCount--;
                 
                 if (gun2AbilityChargeCount == 0)
@@ -232,7 +237,6 @@ public class PlayerController : MonoBehaviour
             
             if(gunNumber == 3 && heymaImdoingmyAbilityHere == true && !_isGun3OnCooldown)
             {
-                lockedOn = false;
                 gun2AbilityChargeCount--;
                 
                 if (gun3AbilityChargeCount == 0)
@@ -445,12 +449,9 @@ public class PlayerController : MonoBehaviour
 
     void Aiming()
     {
-        if(gunNumber != 2 || lockedOn == false)
-        {
             lookDir = mousePos - rigid.position;
             float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 180;
             gun.rotation = Quaternion.Euler(0, 0, angle);
-        }
     }
 
     void RotationAim()

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8721399768134953863}
   - component: {fileID: 8645644007787013126}
   - component: {fileID: 8864557122639657077}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CFXR Explosion 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4780,7 +4780,7 @@ GameObject:
   - component: {fileID: 3867604545538344921}
   - component: {fileID: 6999819055660948953}
   - component: {fileID: 2271651789161496925}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: image-fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4857,7 +4857,7 @@ GameObject:
   - component: {fileID: 1456734106765957322}
   - component: {fileID: 4924014281594477299}
   - component: {fileID: 7171857246763661407}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4959,7 +4959,7 @@ GameObject:
   - component: {fileID: 1407799480467682736}
   - component: {fileID: 5729704249712364798}
   - component: {fileID: 584204548276423758}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Lines
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9747,7 +9747,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3121012212350020667}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: projectile-Spawn-Positon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9780,7 +9780,7 @@ GameObject:
   - component: {fileID: 8291323177237022008}
   - component: {fileID: 8806391601628249197}
   - component: {fileID: 1674848605079966015}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14570,7 +14570,7 @@ GameObject:
   - component: {fileID: 1384380931373741821}
   - component: {fileID: 7545292540224012454}
   - component: {fileID: 7732519000534960560}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19288,7 +19288,7 @@ GameObject:
   - component: {fileID: 3836085040977960778}
   - component: {fileID: 2641636997441030265}
   - component: {fileID: 1216659256593738139}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19406,7 +19406,7 @@ GameObject:
   - component: {fileID: 7401968973827588799}
   - component: {fileID: 2420482851614337203}
   - component: {fileID: 2231273441393677091}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24308,7 +24308,7 @@ GameObject:
   - component: {fileID: 1520952484417377621}
   - component: {fileID: 3754800816235162335}
   - component: {fileID: 1606269242756156901}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: prefab-enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -24535,7 +24535,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4753304680618495984}
   - component: {fileID: 5250845293285528206}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ui-health-bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24588,7 +24588,7 @@ GameObject:
   - component: {fileID: 4555600383327645616}
   - component: {fileID: 1707855930903821130}
   - component: {fileID: 8129387732111750824}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: image-background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24664,7 +24664,7 @@ GameObject:
   - component: {fileID: 1776493499493633819}
   - component: {fileID: 4116650241875215822}
   - component: {fileID: 5618465778136779337}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Impact small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
