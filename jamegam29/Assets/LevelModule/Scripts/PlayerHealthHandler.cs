@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GameEvents;
+using UnityEngine;
 
 namespace LevelModule.Scripts
 {
@@ -6,6 +7,7 @@ namespace LevelModule.Scripts
     {
         [SerializeField] private int maxHealth = 100; // The maximum health of the GameObject
         [SerializeField] private PlayerHealthBarHandler playerHealthBarHandler;
+        [SerializeField] private GameEvent playerDeathEvent;
         
         private int currentHealth; // The current health of the GameObject
         private bool _isAlive;
@@ -23,9 +25,6 @@ namespace LevelModule.Scripts
                 return;
             
             currentHealth -= damage;
-            
-            
-          
 
             // If the health drops to 0 or below, trigger death
             if (currentHealth <= 0)
@@ -44,6 +43,8 @@ namespace LevelModule.Scripts
         {
             Debug.Log("Player has died");
             _isAlive = false;
+            playerDeathEvent.Raise();
+            gameObject.SetActive(false);
         }
 
         // Getter for current health

@@ -30,11 +30,13 @@ namespace LevelModule.Scripts.Enemy
 
         public GameEvent OnLevelTransitionEvent;
         public GameEvent OnLevelTransitionFinishedEvent;
+        public GameEvent OnPlayerDeathEvent;
         
         private EnemyHealthHandler enemyHealthHandler;
         private SpriteRenderer _spriteRenderer;
         private LevelTransitionEventHandler _levelTransitionEventHandler;
         private LevelTransitionFinishedEventHandler _levelTransitionFinishedEventHandler;
+        private PlayerDeathEventHandler _playerDeathEventHandler;
         
         private GameObject player; // Reference to the player
         private bool _isCoolingDown;
@@ -45,8 +47,11 @@ namespace LevelModule.Scripts.Enemy
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
             enemyHealthHandler = GetComponent<EnemyHealthHandler>();
+            
             _levelTransitionEventHandler = new LevelTransitionEventHandler(this);
             _levelTransitionFinishedEventHandler = new LevelTransitionFinishedEventHandler(this);
+            _playerDeathEventHandler = new PlayerDeathEventHandler(this);
+            
             isFrozen = true;
         }
 
@@ -54,12 +59,14 @@ namespace LevelModule.Scripts.Enemy
         {
             OnLevelTransitionEvent.RegisterListener(_levelTransitionEventHandler);
             OnLevelTransitionFinishedEvent.RegisterListener(_levelTransitionFinishedEventHandler);
+            OnPlayerDeathEvent.RegisterListener(_playerDeathEventHandler);
         }
 
         private void OnDestroy()
         {
             OnLevelTransitionEvent.UnregisterListener(_levelTransitionEventHandler);
             OnLevelTransitionFinishedEvent.UnregisterListener(_levelTransitionFinishedEventHandler);
+            OnPlayerDeathEvent.UnregisterListener(_playerDeathEventHandler);
         }
 
         private void Start()
@@ -265,6 +272,12 @@ namespace LevelModule.Scripts.Enemy
             isFrozen = freeze;
         }
 
+        private void DestroyEnemy()
+        {
+            StopAllCoroutines();
+            Destroy(gameObject);
+        }
+
         private void OnDrawGizmos()
         {
             if (enemyData == null)
@@ -301,6 +314,21 @@ namespace LevelModule.Scripts.Enemy
             public void OnEventRaised()
             {
                 _enemyController.FreezeEnemy(false);
+            }
+        }
+        
+        private class PlayerDeathEventHandler : IGameEventListener
+        {
+            private readonly EnemyController _enemyController;
+
+            public PlayerDeathEventHandler(EnemyController enemyController)
+            {
+                _enemyController = enemyController;
+            }
+
+            public void OnEventRaised()
+            {
+                _enemyController.DestroyEnemy();
             }
         }
     }

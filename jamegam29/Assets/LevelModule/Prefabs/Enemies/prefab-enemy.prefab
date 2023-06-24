@@ -24506,6 +24506,7 @@ MonoBehaviour:
   projectileSpawnPosition: {fileID: 3121012212350020667}
   OnLevelTransitionEvent: {fileID: 11400000, guid: aa055f803cd8788418815532e27e93ea, type: 2}
   OnLevelTransitionFinishedEvent: {fileID: 11400000, guid: c41f09d78b248f14ba656dc9822e5fab, type: 2}
+  OnPlayerDeathEvent: {fileID: 11400000, guid: 65da9006dcb90e041a25f87086a658f8, type: 2}
 --- !u!114 &1606269242756156901
 MonoBehaviour:
   m_ObjectHideFlags: 0
