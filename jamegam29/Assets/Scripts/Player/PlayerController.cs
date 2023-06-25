@@ -182,9 +182,6 @@ public class PlayerController : MonoBehaviour
         
         if(Input.GetKeyDown(KeyCode.Mouse1))
         {
-            
-
-
             //shotgun
             if(gunNumber == 1 && !_isGun1OnCooldown)
             {
@@ -233,12 +230,8 @@ public class PlayerController : MonoBehaviour
                 {
                     Debug.Log("ha");
                 }
- 
 
             }
-            
-           
-            
         }
         if(Input.GetKey(KeyCode.Mouse1))
         {
@@ -304,6 +297,8 @@ public class PlayerController : MonoBehaviour
         sexyLight.intensity = 1;
         sexyFlash.SetActive(false);
         mainAudio.PlayOneShot(audioClips[0], SFXVolume);
+
+        heymaImdoingmyAbilityHere = true;
     }
 
     private IEnumerator Co_GunAbilityCooldown(GunType gunType)
