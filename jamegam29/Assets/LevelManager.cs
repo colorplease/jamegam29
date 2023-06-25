@@ -10,7 +10,8 @@ using Random = UnityEngine.Random;
 
 public class LevelManager : MonoBehaviour
 {
-    
+    [SerializeField] private bool runTutorial;
+    [SerializeField] private List<GameObject> tutorialPrefabs;
     [SerializeField] private List<GameObject> roomPrefabs;
     [SerializeField] private int killsRequiredPerRoom;
     [SerializeField] private GameEvent enemyKilledEvent;
@@ -22,7 +23,8 @@ public class LevelManager : MonoBehaviour
     
     private GameObject activeLevel;
     private int currentKillCount;
-    private int levelIndex;
+
+    private int tutorialCompletionIndex;
 
     private bool isFirstRun;
   
@@ -39,7 +41,15 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CreateRoom();
+        if (runTutorial)
+        {
+            CreateRoomTutorial();
+        }
+        else
+        {
+            CreateRoom();
+        }
+       
     }
 
     private void OnDestroy()
@@ -55,8 +65,42 @@ public class LevelManager : MonoBehaviour
         if (currentKillCount == killsRequiredPerRoom)
         {
             currentKillCount = 0;
-            levelIndex++;
             levelCompletedEvent.Raise();
+
+            if (runTutorial)
+            {
+                tutorialCompletionIndex++;
+
+                if (tutorialCompletionIndex == tutorialPrefabs.Count)
+                {
+                    runTutorial = false;
+                }
+            }
+        }
+    }
+
+    private void CreateRoomTutorial()
+    {
+        Vector3 newLevelPosition = Vector3.zero;
+        
+        // Load new level
+        if (activeLevel != null)
+        {
+            newLevelPosition = activeLevel.transform.position;
+            newLevelPosition.y += -11f;
+            
+            CleanupPreviousLevel();
+        }
+        
+        killsRequiredPerRoom = 0;
+        activeLevel = Instantiate(tutorialPrefabs[tutorialCompletionIndex], newLevelPosition, Quaternion.identity);;
+
+        var enemies = activeLevel.GetComponentsInChildren<EnemySpawnController>();
+
+        foreach (var enemy in enemies)
+        {
+            enemy.SpawnSelectedEnemy();
+            killsRequiredPerRoom++;
         }
     }
 
@@ -136,7 +180,15 @@ public class LevelManager : MonoBehaviour
 
         public void OnEventRaised()
         {
-            _levelManager.CreateRoom();
+            if (_levelManager.runTutorial)
+            {
+                _levelManager.CreateRoomTutorial();
+            }
+            else
+            {
+                _levelManager.CreateRoom();
+            }
+           
         }
     }
     
