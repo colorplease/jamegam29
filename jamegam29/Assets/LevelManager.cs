@@ -74,7 +74,7 @@ public class LevelManager : MonoBehaviour
         var level = Instantiate(roomPrefabs[levelIndex], newLevelPosition, Quaternion.identity);
         activeLevel = level;
 
-        var enemies = FindObjectsOfType<EnemySpawnController>();
+        var enemies = level.GetComponentsInChildren<EnemySpawnController>();
 
         foreach (var enemy in enemies)
         {
