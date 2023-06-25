@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenuHandler : MonoBehaviour
 {
+    public string mainGameSceneName;
     public Slider musicSlider;
     public Slider sfxSlider;
 
@@ -15,6 +17,11 @@ public class MainMenuHandler : MonoBehaviour
         // Assuming the methods are in the same script as the sliders
         musicSlider.onValueChanged.AddListener(delegate { SaveSettings(musicSlider.value, sfxSlider.value); });
         sfxSlider.onValueChanged.AddListener(delegate { SaveSettings(musicSlider.value, sfxSlider.value); });
+    }
+
+    public void ButtonEvt_Play()
+    {
+        SceneManager.LoadScene(mainGameSceneName);
     }
 
     public void ButtonEvt_Exit()

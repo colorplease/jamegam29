@@ -9,7 +9,7 @@ namespace LevelModule.Scripts.UI
 {
     public class StoryUIHandler : MonoBehaviour
     {
-        [SerializeField] private CanvasGroup pageCanvasGroup;
+        [SerializeField] private GameObject mainMenuRef;
         [SerializeField] private Button nextButton;
         [SerializeField] private Image pageImageRef;
         [SerializeField] private TextMeshProUGUI pageText;
@@ -80,12 +80,14 @@ namespace LevelModule.Scripts.UI
             pageImageRef.rectTransform.anchoredPosition = originalPosition;
             pageImageRef.color = new Color(pageImageRef.color.r, pageImageRef.color.g, pageImageRef.color.b, originalAlpha);
 
-        
-            if(storyIndex == numberOfPages)
+
+            if (storyIndex == numberOfPages)
+            {
                 gameObject.SetActive(false);
+                mainMenuRef.SetActive(true);
+                return;
+            }
             
-          
-        
             ShowPage();
         }
     }
