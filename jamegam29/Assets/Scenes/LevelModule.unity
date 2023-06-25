@@ -2902,7 +2902,7 @@ MonoBehaviour:
   - gunName: PintoBurst
     gunSize: {x: 0.85, y: 0.85}
     firePointLocation: {x: -4, y: 0.15}
-    gunDamage: 0.5
+    gunDamage: 20
     bulletForce: 35
     fireRate: 2
     gunSprite: {fileID: 21300000, guid: 50b14c682c1459e439a3bcc4363b1819, type: 3}

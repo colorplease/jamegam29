@@ -22,11 +22,12 @@ public class PlayerBullet : MonoBehaviour
     }
     void OnCollisionEnter2D(Collision2D other)
     {
-        Debug.Log("Bullet Collided with " + other.transform.name);
+       
         
         if(other.transform.tag == "Wall" || (other.transform.tag.Equals("Enemy")))
         {
             var enemy =  other.transform.GetComponent<EnemyHealthHandler>();
+            Debug.Log(transform.name + " Collided with " + other.transform.name + "Damage " + bulletDmage);
             if (enemy)
             {
                 enemy.TakeDamage(bulletDmage);

@@ -419,9 +419,11 @@ public class PlayerController : MonoBehaviour
                 nextTimeToFire = Time.time + 1f/guns[gunNumber].fireRate;
             }
             GameObject bullet = Instantiate(guns[gunNumber].bulletType, firePoint.position, firePoint.rotation);
-            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
             bullet.GetComponent<PlayerBullet>().InitiializeBullet(guns[gunNumber].gunDamage);
+            
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
             rb.AddForce(-firePoint.right * guns[gunNumber].bulletForce, ForceMode2D.Impulse);
+            
             screenShake.ShakeShake(guns[gunNumber].shakeDuration, guns[gunNumber].curve, guns[gunNumber].intensifier);
         }
         if(Input.GetButtonDown("Fire1") && gunNumber == 1 && Time.time >= nextTimeToFire)
@@ -430,6 +432,8 @@ public class PlayerController : MonoBehaviour
             for(int i = 0; i<Random.Range(10,15);i++)
             {
                 GameObject bullet = Instantiate(guns[gunNumber].bulletType, firePoint.position, firePoint.rotation);
+                bullet.GetComponent<PlayerBullet>().InitiializeBullet(guns[gunNumber].gunDamage);
+                
                 float variation = Random.Range(-20,20);
                 var x = firePoint.position.x - transform.position.x;
                 var y = firePoint.position.y - transform.position.y;
