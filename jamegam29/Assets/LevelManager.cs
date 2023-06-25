@@ -8,11 +8,12 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] private CameraHandler _cameraHandler;
+    
     [SerializeField] private List<GameObject> roomPrefabs;
     [SerializeField] private int killsRequiredPerRoom;
     [SerializeField] private GameEvent enemyKilledEvent;
     [SerializeField] private GameEvent levelTransitionEvent;
+    [SerializeField] private GameEvent levelCompletedEvent;
 
     private EnemyDeathEventHandler _enemyDeathEventHandler;
     private LevelTransitionEventHandler _levelTransitionEventHandler;
@@ -53,6 +54,7 @@ public class LevelManager : MonoBehaviour
         {
             currentKillCount = 0;
             levelIndex++;
+            levelCompletedEvent.Raise();
         }
     }
 
@@ -65,6 +67,8 @@ public class LevelManager : MonoBehaviour
         {
             newLevelPosition = activeLevel.transform.position;
             newLevelPosition.y += -11f;
+            
+            CleanupPreviousLevel();
         }
 
         var level = Instantiate(roomPrefabs[levelIndex], newLevelPosition, Quaternion.identity);
@@ -84,6 +88,21 @@ public class LevelManager : MonoBehaviour
             return Vector3.zero;
         
         return activeLevel.transform.position;
+    }
+
+    private void CleanupPreviousLevel()
+    {
+        var enemies = FindObjectsOfType<EnemySpawnController>();
+        
+        foreach (var enemy in enemies)
+        {
+            Destroy(enemy.gameObject);
+        }
+
+        if (activeLevel != null)
+        {
+            Destroy(activeLevel);
+        }
     }
     
     private class EnemyDeathEventHandler : IGameEventListener

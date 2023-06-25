@@ -8,17 +8,29 @@
       <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
-        <e p="HealthBarHandler.cs" t="Include" />
+        <e p="AbilityUIHandler.cs" t="Include" />
+        <e p="EnemySpawnController.cs" t="Include" />
+        <e p="GameHudHandler.cs" t="Include" />
+        <e p="LevelManager.cs" t="Include" />
         <e p="LevelModule" t="Include">
           <e p="2D" t="Include" />
-          <e p="Prefabs" t="Include" />
+          <e p="Prefabs" t="Include">
+            <e p="Enemies" t="Include">
+              <e p="Projectiles" t="Include" />
+            </e>
+            <e p="UI" t="Include" />
+          </e>
           <e p="Scripts" t="Include">
+            <e p="AbilityData" t="Include">
+              <e p="AbilityData.cs" t="Include" />
+            </e>
             <e p="CameraHandler.cs" t="Include" />
             <e p="DebugLevelModule.cs" t="Include" />
             <e p="enemy" t="Include">
               <e p="Data" t="Include" />
               <e p="EnemyController.cs" t="Include" />
               <e p="EnemyData.cs" t="Include" />
+              <e p="EnemyHealthBarHandler.cs" t="Include" />
               <e p="EnemyHealthHandler.cs" t="Include" />
             </e>
             <e p="GameEvents" t="Include">
@@ -27,11 +39,28 @@
               </e>
             </e>
             <e p="IDamageable.cs" t="Include" />
+            <e p="PlayerHealthBarHandler.cs" t="Include" />
             <e p="PlayerHealthHandler.cs" t="Include" />
             <e p="Projectile" t="Include">
               <e p="EnemyProjectile.cs" t="Include" />
               <e p="ProjectilePooler.cs" t="Include" />
             </e>
+            <e p="UI" t="Include">
+              <e p="KillCountUIHandler.cs" t="Include" />
+              <e p="PageData.cs" t="Include" />
+              <e p="Pages" t="Include" />
+              <e p="StoryUIHandler.cs" t="Include" />
+            </e>
+          </e>
+          <e p="Shaders" t="Include">
+            <e p="CFXR Particle Distortion.shader" t="Include" />
+            <e p="CFXR Particle Glow.shader" t="Include" />
+            <e p="CFXR Particle Procedural Ring.shader" t="Include" />
+            <e p="CFXR Particle Ubershader.shader" t="Include" />
+            <e p="CFXR.cginc" t="Include" />
+            <e p="CFXR_PASSES.cginc" t="Include" />
+            <e p="CFXR_SETTINGS.cginc" t="Include" />
+            <e p="CFXR_URP.cginc" t="Include" />
           </e>
           <e p="UnityAssetStore" t="Include">
             <e p="2D Platformer" t="Include">
@@ -58,6 +87,7 @@
               </e>
             </e>
           </e>
+          <e p="VFX" t="Include" />
         </e>
         <e p="Ollie" t="Include" />
         <e p="Plugins" t="Include">
@@ -111,6 +141,9 @@
         <e p="Resources" t="Include" />
         <e p="Scenes" t="Include" />
         <e p="Scripts" t="Include">
+          <e p="Juice" t="Include">
+            <e p="ScreenShake.cs" t="Include" />
+          </e>
           <e p="player" t="Include">
             <e p="PlayerBullet.cs" t="Include" />
             <e p="PlayerController.cs" t="Include" />
@@ -119,8 +152,11 @@
         <e p="Settings" t="Include">
           <e p="Scenes" t="Include" />
         </e>
+        <e p="SFX" t="Include" />
         <e p="Sprites" t="Include">
-          <e p="NotPlaceHolders" t="Include" />
+          <e p="NotPlaceHolders" t="Include">
+            <e p="Animations" t="Include" />
+          </e>
           <e p="PlaceHolder" t="Include" />
         </e>
         <e p="TextMesh Pro" t="Include">

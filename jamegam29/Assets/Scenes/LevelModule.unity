@@ -1572,7 +1572,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 20.208374, y: -7.658203}
+  m_AnchoredPosition: {x: 20.208496, y: -7.658203}
   m_SizeDelta: {x: -818.4435, y: -469.6872}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &1175905279
@@ -2696,7 +2696,7 @@ GameObject:
   - component: {fileID: 1702399241}
   - component: {fileID: 1702399240}
   - component: {fileID: 1702399246}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -3179,6 +3179,9 @@ MonoBehaviour:
   maxHealth: 100
   playerHealthBarHandler: {fileID: 972826290877499504}
   playerDeathEvent: {fileID: 11400000, guid: 65da9006dcb90e041a25f87086a658f8, type: 2}
+  playerSpriteRenderer: {fileID: 1702399244}
+  iFramesDuration: 2
+  numberOfFlashes: 3
 --- !u!1 &1706012153
 GameObject:
   m_ObjectHideFlags: 0
@@ -3557,7 +3560,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4facaaa081ec314cb372d8a8f753b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cameraHandler: {fileID: 7249214849675044789}
   roomPrefabs:
   - {fileID: 2034953381121198116, guid: a2ce41d7f63a5e74983fdba15dc25889, type: 3}
   - {fileID: 2034953381121198116, guid: a2ce41d7f63a5e74983fdba15dc25889, type: 3}
@@ -3582,6 +3584,7 @@ MonoBehaviour:
   killsRequiredPerRoom: 2
   enemyKilledEvent: {fileID: 11400000, guid: 6ae10b5e9bae354498922de3b283e333, type: 2}
   levelTransitionEvent: {fileID: 11400000, guid: aa055f803cd8788418815532e27e93ea, type: 2}
+  levelCompletedEvent: {fileID: 11400000, guid: 589087949a36c104c842ef9b78e77401, type: 2}
 --- !u!4 &1898664443
 Transform:
   m_ObjectHideFlags: 0

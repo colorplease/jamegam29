@@ -1,4 +1,5 @@
-﻿using GameEvents;
+﻿using System.Collections;
+using GameEvents;
 using UnityEngine;
 
 namespace LevelModule.Scripts
@@ -8,9 +9,15 @@ namespace LevelModule.Scripts
         [SerializeField] private int maxHealth = 100; // The maximum health of the GameObject
         [SerializeField] private PlayerHealthBarHandler playerHealthBarHandler;
         [SerializeField] private GameEvent playerDeathEvent;
-        
+        [SerializeField] private SpriteRenderer playerSpriteRenderer;
+
+        [Header("iFrames")] 
+        [SerializeField] private float iFramesDuration;
+
+        [SerializeField] private int numberOfFlashes;
         private int currentHealth; // The current health of the GameObject
         private bool _isAlive;
+        private bool isInvulnerable;
 
         private void Start()
         {
@@ -21,7 +28,7 @@ namespace LevelModule.Scripts
         // Reduce the health of the GameObject
         public void TakeDamage(int damage)
         {
-            if (!_isAlive)
+            if (!_isAlive || isInvulnerable)
                 return;
             
             currentHealth -= damage;
@@ -35,8 +42,11 @@ namespace LevelModule.Scripts
             else
             {
                 playerHealthBarHandler.UpdateHealthBar(currentHealth);
+                StartCoroutine(Invunerability());
             }
         }
+
+       
 
         //TODO:: Add player death logic
         private void Die()
@@ -45,6 +55,23 @@ namespace LevelModule.Scripts
             _isAlive = false;
             playerDeathEvent.Raise();
             gameObject.SetActive(false);
+        }
+
+        private IEnumerator Invunerability()
+        {
+            Physics.IgnoreLayerCollision(7,8, true);
+            isInvulnerable = true;
+
+            for (int i = 0; i < numberOfFlashes; i++)
+            {
+                playerSpriteRenderer.color = new Color(1,0,0,0.5f);
+                yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 3));
+                playerSpriteRenderer.color = Color.white;
+                yield return new WaitForSeconds(1f);
+            }
+
+            isInvulnerable = false;
+            Physics2D.IgnoreLayerCollision(7,8,true);
         }
 
         // Getter for current health
