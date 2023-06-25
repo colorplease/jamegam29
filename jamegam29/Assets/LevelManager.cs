@@ -5,6 +5,8 @@ using GameEvents;
 using LevelModule.Scripts;
 using LevelModule.Scripts.Enemy;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 
 public class LevelManager : MonoBehaviour
 {
@@ -71,14 +73,17 @@ public class LevelManager : MonoBehaviour
             CleanupPreviousLevel();
         }
 
-        var level = Instantiate(roomPrefabs[levelIndex], newLevelPosition, Quaternion.identity);
+        killsRequiredPerRoom = 0;
+        var randomIndex = Random.Range(0, roomPrefabs.Count);
+        var level = Instantiate(roomPrefabs[randomIndex], newLevelPosition, Quaternion.identity);
         activeLevel = level;
 
         var enemies = level.GetComponentsInChildren<EnemySpawnController>();
 
         foreach (var enemy in enemies)
         {
-           enemy.SpawnSelectedEnemy(); 
+           enemy.SpawnSelectedEnemy();
+           killsRequiredPerRoom++;
         }
     }
 
