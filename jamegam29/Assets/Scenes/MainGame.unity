@@ -862,8 +862,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1141696116}
-  m_RootOrder: -1
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &704773371
 GameObject:
@@ -1514,11 +1514,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1702399245}
-  - {fileID: 619394802}
   - {fileID: 1898664443}
   - {fileID: 2098893914}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1175905277
 GameObject:
@@ -2554,6 +2553,7 @@ MonoBehaviour:
   mainMenuRef: {fileID: 0}
   nextButton: {fileID: 0}
   pageImageRef: {fileID: 55844569}
+  _canvasGroup: {fileID: 0}
   pageText: {fileID: 1922675708}
   pageData:
   - {fileID: 11400000, guid: 3ba907d4e010bca499ba174f39f4cc2e, type: 2}
@@ -3058,6 +3058,7 @@ MonoBehaviour:
   playerHealthBarHandler: {fileID: 972826290877499504}
   playerDeathEvent: {fileID: 11400000, guid: 65da9006dcb90e041a25f87086a658f8, type: 2}
   playerSpriteRenderer: {fileID: 1702399244}
+  killConfirmedEvent: {fileID: 11400000, guid: 6ae10b5e9bae354498922de3b283e333, type: 2}
   iFramesDuration: 2
   numberOfFlashes: 3
 --- !u!1 &1706012153

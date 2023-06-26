@@ -29,6 +29,12 @@ public class EnemySpawnController : MonoBehaviour
     
     public void SpawnSelectedEnemy()
     {
+        StartCoroutine(Co_SpawnEnemyWithDelay());
+    }
+
+    private IEnumerator Co_SpawnEnemyWithDelay()
+    {
+        yield return new WaitForSeconds(0.8f);
         //1 tendril
         //2 harp
         //3 soyfish

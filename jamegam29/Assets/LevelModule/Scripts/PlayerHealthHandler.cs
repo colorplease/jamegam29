@@ -1,15 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using GameEvents;
 using UnityEngine;
 
 namespace LevelModule.Scripts
 {
-    public class PlayerHealthHandler : MonoBehaviour, IDamageable
+    public class PlayerHealthHandler : MonoBehaviour, IDamageable, IGameEventListener
     {
         [SerializeField] private int maxHealth = 100; // The maximum health of the GameObject
         [SerializeField] private PlayerHealthBarHandler playerHealthBarHandler;
         [SerializeField] private GameEvent playerDeathEvent;
         [SerializeField] private SpriteRenderer playerSpriteRenderer;
+        [SerializeField] private GameEvent killConfirmedEvent;
 
         [Header("iFrames")] 
         [SerializeField] private float iFramesDuration;
@@ -18,6 +20,17 @@ namespace LevelModule.Scripts
         private int currentHealth; // The current health of the GameObject
         private bool _isAlive;
         private bool isInvulnerable;
+        private int killCount = 0;
+
+        private void Awake()
+        {
+            killConfirmedEvent.RegisterListener(this);
+        }
+
+        private void OnDestroy()
+        {
+            killConfirmedEvent.UnregisterListener(this);
+        }
 
         private void Start()
         {
@@ -78,6 +91,18 @@ namespace LevelModule.Scripts
         public float GetCurrentHealth()
         {
             return currentHealth;
+        }
+
+        public void OnEventRaised()
+        {
+            killCount++;
+            if (killCount == 10)
+            {
+                currentHealth = maxHealth;
+                killCount = 0;
+                
+                playerHealthBarHandler.UpdateHealthBar(currentHealth);
+            }
         }
     }
 }
