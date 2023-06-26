@@ -23,6 +23,35 @@ namespace LevelModule.Scripts.Enemy
         public EnemyData goldenGooseData;
         public EnemyData soyFishData;
         public EnemyData beanStalkData;
+
+        [Header("Soyfish Settings")]
+        public Sprite soyFish;
+        public BoxCollider2D soyFishBoxCollider;
+        public PolygonCollider2D soyFishPolyCollider;
+        public Vector3 soyFishSpriteSize;
+        public Vector3 soyFishSpriteOffset;
+
+        [Header("Harp Settings")]
+        public Sprite harp;
+        public BoxCollider2D harpBoxCollider;
+        public PolygonCollider2D harpPolyCollider;
+        public Vector3 harpSpriteSize;
+        public Vector3 harpSpriteOffset;
+
+        [Header("Tendril Settings")]
+        public Sprite tendrilFish;
+        public BoxCollider2D tendrilBoxCollider;
+        public PolygonCollider2D tendrilPolyCollider;
+        public Vector3 tendrilSpriteSize;
+        public Vector3 tendrilSpriteOffset;
+
+        [Header("Goose Settings")]
+        public Sprite goose;
+        public Sprite gooseAttack;
+        public BoxCollider2D gooseBoxCollider;
+        public PolygonCollider2D goosePolyCollider;
+        public Vector3 gooseSpriteSize;
+        public Vector3 gooseSpriteOffset;
         
         private EnemyData enemyData;
         
@@ -41,16 +70,27 @@ namespace LevelModule.Scripts.Enemy
         private GameObject player; // Reference to the player
         private bool _isCoolingDown;
         private bool isFrozen;
+
+        
        
 
         private void Awake()
         {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             enemyHealthHandler = GetComponent<EnemyHealthHandler>();
             
             _levelTransitionEventHandler = new LevelTransitionEventHandler(this);
             _levelTransitionFinishedEventHandler = new LevelTransitionFinishedEventHandler(this);
             _playerDeathEventHandler = new PlayerDeathEventHandler(this);
+
+            soyFishBoxCollider.enabled = false;
+            soyFishPolyCollider.enabled = false;
+            harpBoxCollider.enabled = false;
+            harpPolyCollider.enabled = false;
+            //tendrilBoxCollider.enabled = false;
+            //tendrilPolyCollider.enabled = false;
+            //gooseBoxCollider.enabled = false;
+            //goosePolyCollider.enabled = false;
             
             isFrozen = true;
         }
@@ -72,6 +112,42 @@ namespace LevelModule.Scripts.Enemy
         private void Start()
         {
             player = GameObject.FindWithTag("Player");
+        }
+
+        public void SpriteInitializeEnemy(EnemyType enemyType)
+        {
+            switch (enemyType)
+            {
+                case EnemyType.Harp:
+                    _spriteRenderer.sprite = soyFish;
+                    harpBoxCollider.enabled = true;
+                    harpPolyCollider.enabled = true;
+                    _spriteRenderer.transform.localScale = harpSpriteSize;
+                    _spriteRenderer.transform.localPosition = harpSpriteOffset;
+                    Animator animator = _spriteRenderer.gameObject.GetComponent<Animator>();
+                    animator.SetInteger("enemyNum", 2);
+                    break;
+                case EnemyType.SoyFish:
+                    _spriteRenderer.sprite = soyFish;
+                    soyFishBoxCollider.enabled = true;
+                    soyFishPolyCollider.enabled = true;
+                    _spriteRenderer.transform.localScale = soyFishSpriteSize;
+                    _spriteRenderer.transform.localPosition = soyFishSpriteOffset;
+                    Animator animator2 = _spriteRenderer.gameObject.GetComponent<Animator>();
+                    animator2.SetInteger("enemyNum", 3);
+                    break;
+                case EnemyType.GoldenGoose:
+                    _spriteRenderer.sprite = goose;
+                    gooseBoxCollider.enabled = true;
+                    goosePolyCollider.enabled = true;
+                    _spriteRenderer.transform.localScale = gooseSpriteSize;
+                    _spriteRenderer.transform.localPosition = gooseSpriteOffset;
+                    break;
+                case EnemyType.BeanstalkTendrils:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(enemyType), enemyType, null);
+            }
         }
 
         public void InitializeEnemy(EnemyType enemyType)
@@ -131,13 +207,13 @@ namespace LevelModule.Scripts.Enemy
             // Flip the sprite if player is on the other side
             if (player.transform.position.x > transform.position.x)
             {
-                _spriteRenderer.flipX = false;
-                shootDirection = transform.right;
+                _spriteRenderer.flipX = true;
+                shootDirection = -transform.right;
             }
             else if (player.transform.position.x < transform.position.x)
             {
-                _spriteRenderer.flipX = true;
-                shootDirection = -transform.right;
+                _spriteRenderer.flipX = false;
+                shootDirection = transform.right;
             }
             
             // Get direction to player
@@ -215,14 +291,22 @@ namespace LevelModule.Scripts.Enemy
             if (_isCoolingDown)
                 return;
             
-          
+            print("ho");
+            _spriteRenderer.sprite = gooseAttack;
             GameObject egg = ProjectilePooler.Instance.GetEgg();
             egg.transform.position = transform.position;
             egg.SetActive(true);
-            
             egg.GetComponent<EnemyProjectile>().InitializeProjectile(shootDirection, enemyData.rangeAttackDamage,EnemyProjectile.ProjectileType.Egg);
             
+            StartCoroutine(sorryBwadeGooseAttack());
+            
             StartCoroutine(Co_Cooldown());
+        }
+
+        IEnumerator sorryBwadeGooseAttack()
+        {
+            yield return new WaitForSeconds(0.5f);
+            _spriteRenderer.sprite = goose;
         }
 
       
@@ -236,6 +320,16 @@ namespace LevelModule.Scripts.Enemy
             // Floats towards you
             Vector3 direction = (player.transform.position - transform.position).normalized;
             transform.position += direction * enemyData.moveSpeed * Time.deltaTime;
+
+            // Flip the sprite if player is on the other side
+            if (player.transform.position.x > transform.position.x)
+            {
+                _spriteRenderer.flipX = true;
+            }
+            else if (player.transform.position.x < transform.position.x)
+            {
+                _spriteRenderer.flipX = false;
+            }
             
             DetectCollisions();
         }

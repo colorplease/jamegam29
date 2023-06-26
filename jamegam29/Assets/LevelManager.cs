@@ -67,6 +67,8 @@ public class LevelManager : MonoBehaviour
         {
             currentKillCount = 0;
             levelCompletedEvent.Raise();
+            SpriteRenderer barrer = GameObject.FindGameObjectWithTag("finish").GetComponent<SpriteRenderer>();
+            barrer.enabled = false;
 
             if (runTutorial)
             {

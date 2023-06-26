@@ -299,8 +299,8 @@ public class PlayerController : MonoBehaviour
                 coolDownTime = gun2AbilityData.abilityCooldown;
                 _isGun2OnCooldown = true;
                 break;
-            case GunType.Gun3:
-                coolDownTime = gun3AbilityData.abilityCooldown;
+            case GunType.Gun1:
+                coolDownTime = gun1AbilityData.abilityCooldown;
                 _isGun3OnCooldown = false;
                 break;
             default:
@@ -325,7 +325,7 @@ public class PlayerController : MonoBehaviour
                 break;
             case GunType.Gun3:
                 _isGun3OnCooldown = false;
-                gun3AbilityChargeCount = gun3AbilityData.abilityCharges;
+                gun1AbilityChargeCount = gun1AbilityData.abilityCharges;
                 break;
         }
         

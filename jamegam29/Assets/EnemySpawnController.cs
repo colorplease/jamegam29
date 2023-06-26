@@ -13,6 +13,7 @@ public class EnemySpawnController : MonoBehaviour
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField]float durationJump;
     [SerializeField]float jumpPower;
+    [Header("1 Tendril, 2 Harp, 3 soyfish, 4 goose")]
     [SerializeField]int enemyToSpawn;
 
     private GameObject playerObjRef;
@@ -77,7 +78,7 @@ public class EnemySpawnController : MonoBehaviour
         var enemyController = enemy.GetComponent<EnemyController>();
         _activeController = enemyController;
         activeEnemyType = enemyType;
-        
+        _activeController.SpriteInitializeEnemy(activeEnemyType);
         enemy.transform.DOJump(spawnPoints[0].position, jumpPower, 1, durationJump).SetEase(Ease.Flash).OnComplete(() =>
         {
             //enemyController.InitializeEnemy(enemyType);
@@ -90,11 +91,6 @@ public class EnemySpawnController : MonoBehaviour
                 spriteRenderer.flipX = playerIsToLeft;
             }
         });
-    }
-
-    public void InitializeEnemy()
-    {
-        
     }
     
   
