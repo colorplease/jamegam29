@@ -2,6 +2,8 @@ using System.Collections;
 using DG.Tweening;
 using GameEvents;
 using UnityEngine;
+using UnityEngine.U2D;
+using PixelPerfectCamera = UnityEngine.Experimental.Rendering.Universal.PixelPerfectCamera;
 
 namespace LevelModule.Scripts
 {
@@ -9,7 +11,7 @@ namespace LevelModule.Scripts
     {
         [SerializeField] private LevelManager _levelManager;
         [SerializeField] ScreenShake screenShake;
-        
+        [SerializeField] private PixelPerfectCamera pixelPerfectCamera;
         [Tooltip("Camera size when zooming in after transition")]
         [SerializeField] private float[] zoomLevelData;
         [SerializeField] private GameEvent levelTransitionEvent;
@@ -25,25 +27,29 @@ namespace LevelModule.Scripts
 
         [SerializeField] private PlayerController playerController;
 
-        // These are the sizes and speed for zooming.
-        [SerializeField] private float zoomSpeed = 2f;
-        [SerializeField] private float transitionDelay = 0.25f;
-        
-        private int currentLevelIndex;
+        private int levelZoom;
+      
         private bool inTransition = false;
 
        
+
+        private bool hasReceivedZoomData;
+       
         
         private Camera camera;
-
+     
         private void Awake()
         {
             camera = Camera.main;
+            
+           
+            
         }
 
         private void Start()
         {
-            currentLevelIndex = 0;
+            
+           
         }
         
         private void Update()
@@ -72,47 +78,36 @@ namespace LevelModule.Scripts
 
         private IEnumerator LevelTransition()
         {
-            //screenShake.RecordCurrentScreenPos();
-            
             levelTransitionEvent.Raise();
-            
-            var newLevelPosition = _levelManager.GetCurrentLevelPosition();
-            Debug.Log("Transition Started " + newLevelPosition);
 
-            Vector3 newPosition = newLevelPosition + offset;
+            Vector3 newPosition = _levelManager.GetCurrentLevelPosition() + offset;
             newPosition.z = transform.position.z;
 
             float t = 0f;
             Vector3 startCameraPosition = transform.position;
-            float startOrthoSize = camera.orthographicSize;
+            int startPPU = pixelPerfectCamera.assetsPPU;
+            
+            Debug.Log("Zoom out size " + levelZoom);
 
             // Move the camera and zoom out
             while (t < 1)
             {
                 t += Time.deltaTime * smoothSpeed;
                 transform.position = Vector3.Lerp(startCameraPosition, newPosition, t);
-                camera.orthographicSize = Mathf.Lerp(startOrthoSize, zoomOutSize, t);
-                yield return null;
-            }
-
-           
-
-            t = 0f;
-            startOrthoSize = camera.orthographicSize;
-
-            // Zoom back in
-            while (t < 1)
-            {
-                t += Time.deltaTime * zoomSpeed;
-                camera.orthographicSize = Mathf.Lerp(startOrthoSize, zoomLevelData[currentLevelIndex], t);
+                pixelPerfectCamera.assetsPPU = (int)Mathf.Lerp(startPPU, levelZoom, t);
                 yield return null;
             }
 
             Debug.Log("Transition Finished");
-            currentLevelIndex++;
+           
             playerController.FreezePlayer(false);
             levelTransitionFinishedEvent.Raise();
             inTransition = false;
+        }
+
+        public void UpdateLevelZoom(int zoom)
+        {
+            levelZoom = zoom;
         }
     }
 }

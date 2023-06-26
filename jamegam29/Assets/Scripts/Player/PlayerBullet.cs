@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerBullet : MonoBehaviour
 {
+    [SerializeField] private GameObject smokeParticleEffect;
     [SerializeField]bool hasFallOff;
     [SerializeField]float minBulletFallOff;
    [SerializeField]float maxBulletFallOff;
@@ -24,6 +25,14 @@ public class PlayerBullet : MonoBehaviour
     {
         if(other.transform.tag == "Wall" || (other.transform.tag.Equals("Enemy")))
         {
+            if (other.transform.tag == "Wall")
+            {
+                // Instantiate the smoke particle effect at the point of collision.
+                GameObject smokeEffect = Instantiate(smokeParticleEffect, other.contacts[0].point, Quaternion.identity);
+                // Ensure the particle system plays in the correct direction for a 2D game.
+                smokeEffect.transform.eulerAngles = new Vector3(-90, 0, 0);
+            }
+
             var enemy =  other.transform.GetComponent<EnemyHealthHandler>();
             //Debug.Log(transform.name + " Collided with " + other.transform.name + "Damage " + bulletDmage);
             if (enemy)

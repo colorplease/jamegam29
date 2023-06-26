@@ -285,6 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae677d5f79d0d541a596b341ec21d75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  smokeParticleEffect: {fileID: 2531041296320004883, guid: c49871ba023083c48b9574314166e6a9, type: 3}
   hasFallOff: 1
   minBulletFallOff: 0.05
   maxBulletFallOff: 0.2

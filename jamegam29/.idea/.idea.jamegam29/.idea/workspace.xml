@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -19,7 +22,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4e5c49f1-2cd7-4e45-a29d-d9c9d78a6e36" name="Default Changelist" comment="" />
+    <list default="true" id="4e5c49f1-2cd7-4e45-a29d-d9c9d78a6e36" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.jamegam29/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.jamegam29/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.jamegam29/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.jamegam29/.idea/indexLayout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.jamegam29/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.jamegam29/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,9 +36,18 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/LevelModule/Scripts/PlayerHealthBarHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/AbilityUIHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/LevelModule/Scripts/UI/KillCountUIHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/LevelManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BarrierHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/FCB9DAC8-AE3A-4886-93B0-F4CD5B0DB0BE/f8/714754c7/Array.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/LevelModule/UnityAssetStore/2D Platformer/Scripts/PlayerUnityController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/EnemySpawnController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/LevelModule/Scripts/DebugLevelModule.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/MainMenuHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/GameHudHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/LevelModule/Scripts/PlayerHealthBarHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/LevelModule/Scripts/UI/StoryUIHandler.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -39,8 +55,29 @@
         <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/DebugGameManager.cs" />
         <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/DebugLevelModule.cs" />
         <option value="$PROJECT_DIR$/Assets/LevelModule/UnityAssetStore/2D Platformer/Scripts/GameManager.cs" />
-        <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/CameraHandler.cs" />
         <option value="$PROJECT_DIR$/Assets/LevelModule/UnityAssetStore/2D Platformer/Scripts/PlayerController.cs" />
+        <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/AbilityData/AbilityData.cs" />
+        <option value="$PROJECT_DIR$/Assets/AbilityUIHandler.cs" />
+        <option value="$PROJECT_DIR$/Assets/KillCountUIHandler.cs" />
+        <option value="$PROJECT_DIR$/Assets/EnenySpawnController.cs" />
+        <option value="$PROJECT_DIR$/Assets/StoryUIHandler.cs" />
+        <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/UI/StoryPage.cs" />
+        <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/UI/PageData.cs" />
+        <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/PlayerHealthBarHandler.cs" />
+        <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/Projectile/EnemyProjectile.cs" />
+        <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/Enemy/EnemyController.cs" />
+        <option value="$PROJECT_DIR$/Assets/RoomManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/GameHudHandler.cs" />
+        <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/Enemy/EnemyHealthHandler.cs" />
+        <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/CameraHandler.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Player/PlayerBullet.cs" />
+        <option value="$PROJECT_DIR$/Assets/BarrierHandler.cs" />
+        <option value="$PROJECT_DIR$/Assets/LevelManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/MainMenuHandler.cs" />
+        <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/UI/StoryUIHandler.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Player/PlayerController.cs" />
+        <option value="$PROJECT_DIR$/Assets/EnemySpawnController.cs" />
+        <option value="$PROJECT_DIR$/Assets/LevelModule/Scripts/PlayerHealthHandler.cs" />
       </list>
     </option>
   </component>
@@ -55,6 +92,7 @@
     <property name="Discover.Launch.Via.Unity" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
@@ -106,5 +144,19 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2317" y="185" width="1406" height="716" key="VCS.FileHistoryDialog" timestamp="1687654094478">
+      <screen x="1920" y="2" width="1920" height="1040" />
+    </state>
+    <state x="2317" y="185" width="1406" height="716" key="VCS.FileHistoryDialog/1920.2.1920.1040/0.0.1920.1040@1920.2.1920.1040" timestamp="1687654094478" />
+    <state x="2676" y="254" key="run.anything.popup" timestamp="1687642694363">
+      <screen x="1920" y="2" width="1920" height="1040" />
+    </state>
+    <state x="2676" y="254" key="run.anything.popup/1920.2.1920.1040/0.0.1920.1040@1920.2.1920.1040" timestamp="1687642694363" />
+    <state x="2676" y="200" width="672" height="676" key="search.everywhere.popup" timestamp="1687745505350">
+      <screen x="1920" y="2" width="1920" height="1040" />
+    </state>
+    <state x="2676" y="200" width="672" height="676" key="search.everywhere.popup/1920.2.1920.1040/0.0.1920.1040@1920.2.1920.1040" timestamp="1687745505350" />
   </component>
 </project>

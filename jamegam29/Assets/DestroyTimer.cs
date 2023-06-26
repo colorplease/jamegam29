@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomData : MonoBehaviour
+public class DestroyTimer : MonoBehaviour
 {
-    public int zoomAmount = 5;
     // Start is called before the first frame update
     void Start()
     {
-        
+        Destroy(gameObject,3);
     }
 
     // Update is called once per frame

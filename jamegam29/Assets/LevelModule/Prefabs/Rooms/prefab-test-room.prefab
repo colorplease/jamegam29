@@ -269,6 +269,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7049136174455270730}
+  - component: {fileID: 6460035496290000190}
   m_Layer: 3
   m_Name: prefab-test-room
   m_TagString: Untagged
@@ -299,6 +300,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6460035496290000190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034953381121198116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9d0efc788b1dbd4fbc6b200f12f180d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoomAmount: 15
 --- !u!1 &2411576361407399463
 GameObject:
   m_ObjectHideFlags: 0

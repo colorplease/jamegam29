@@ -9,6 +9,7 @@
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="AbilityUIHandler.cs" t="Include" />
+        <e p="BarrierHandler.cs" t="Include" />
         <e p="EnemySpawnController.cs" t="Include" />
         <e p="GameHudHandler.cs" t="Include" />
         <e p="LevelManager.cs" t="Include" />
@@ -18,6 +19,7 @@
             <e p="Enemies" t="Include">
               <e p="Projectiles" t="Include" />
             </e>
+            <e p="Rooms" t="Include" />
             <e p="UI" t="Include" />
           </e>
           <e p="Scripts" t="Include">
@@ -89,6 +91,7 @@
           </e>
           <e p="VFX" t="Include" />
         </e>
+        <e p="MainMenuHandler.cs" t="Include" />
         <e p="Ollie" t="Include" />
         <e p="Plugins" t="Include">
           <e p="Demigiant" t="Include">

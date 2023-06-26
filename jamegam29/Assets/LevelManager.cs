@@ -10,6 +10,7 @@ using Random = UnityEngine.Random;
 
 public class LevelManager : MonoBehaviour
 {
+    [SerializeField] private CameraHandler _cameraHandler;
     [SerializeField] private bool runTutorial;
     [SerializeField] private List<GameObject> tutorialPrefabs;
     [SerializeField] private List<GameObject> roomPrefabs;
@@ -121,6 +122,8 @@ public class LevelManager : MonoBehaviour
         var randomIndex = Random.Range(0, roomPrefabs.Count);
         var level = Instantiate(roomPrefabs[randomIndex], newLevelPosition, Quaternion.identity);
         activeLevel = level;
+        _cameraHandler.UpdateLevelZoom(   activeLevel.GetComponent<RoomData>().zoomAmount);
+     
 
         var enemies = level.GetComponentsInChildren<EnemySpawnController>();
 

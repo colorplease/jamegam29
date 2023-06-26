@@ -3240,6 +3240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4facaaa081ec314cb372d8a8f753b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cameraHandler: {fileID: 7249214849675044789}
   runTutorial: 0
   tutorialPrefabs: []
   roomPrefabs:
@@ -4525,6 +4526,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _levelManager: {fileID: 1898664442}
   screenShake: {fileID: 831319207}
+  pixelPerfectCamera: {fileID: 7249214849675044788}
   zoomLevelData:
   - 5
   - 5
