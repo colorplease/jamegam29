@@ -258,7 +258,7 @@ public class PlayerController : MonoBehaviour
 
                 if (gun1AbilityChargeCount == 0)
                 {
-                    StartCoroutine(Co_GunAbilityCooldown(GunType.Gun1));
+                    StartCoroutine(Co_GunAbilityCooldown(GunType.Gun2));
                     heymaImdoingmyAbilityHere = false;
                 }
             }
@@ -268,21 +268,10 @@ public class PlayerController : MonoBehaviour
                 
                 if (gun2AbilityChargeCount == 0)
                 {
-                    StartCoroutine(Co_GunAbilityCooldown(GunType.Gun2));
-                    heymaImdoingmyAbilityHere = false;
-                }
-
-            }
-            
-            if(gunNumber == 2 && heymaImdoingmyAbilityHere == true && !_isGun3OnCooldown)
-            {
-                gun2AbilityChargeCount--;
-                
-                if (gun3AbilityChargeCount == 0)
-                {
                     StartCoroutine(Co_GunAbilityCooldown(GunType.Gun3));
                     heymaImdoingmyAbilityHere = false;
                 }
+
             }
             
            
@@ -306,10 +295,6 @@ public class PlayerController : MonoBehaviour
 
         switch (gunType)
         {
-            case GunType.Gun1:
-                coolDownTime = gun1AbilityData.abilityCooldown;
-                _isGun1OnCooldown = true;
-                break;
             case GunType.Gun2:
                 coolDownTime = gun2AbilityData.abilityCooldown;
                 _isGun2OnCooldown = true;
@@ -334,10 +319,6 @@ public class PlayerController : MonoBehaviour
         _abilityUIHandler.ResetIcon(gunType);
         switch (gunType)
         {
-            case GunType.Gun1:
-                _isGun1OnCooldown = false;
-                gun1AbilityChargeCount = gun1AbilityData.abilityCharges;
-                break;
             case GunType.Gun2:
                 _isGun2OnCooldown = false;
                 gun2AbilityChargeCount = gun2AbilityData.abilityCharges;
