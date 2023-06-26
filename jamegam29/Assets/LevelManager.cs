@@ -28,6 +28,7 @@ public class LevelManager : MonoBehaviour
     private int tutorialCompletionIndex;
 
     private bool isFirstRun;
+    private AudioSource _audioSource;
   
 
     private void Awake()
@@ -37,6 +38,7 @@ public class LevelManager : MonoBehaviour
         
         enemyKilledEvent.RegisterListener(_enemyDeathEventHandler);
         levelTransitionEvent.RegisterListener(_levelTransitionEventHandler);
+        _audioSource = GetComponent<AudioSource>();
     }
     
     // Start is called before the first frame update
@@ -142,6 +144,11 @@ public class LevelManager : MonoBehaviour
             return Vector3.zero;
         
         return activeLevel.transform.position;
+    }
+
+    public void PlayRoomCompleteJingle()
+    {
+        
     }
 
     private void CleanupPreviousLevel()

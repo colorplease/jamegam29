@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class MainMenuHandler : MonoBehaviour
 {
+    public AudioSource AudioSource;
     public string mainGameSceneName;
     public Slider musicSlider;
     public Slider sfxSlider;
@@ -21,6 +22,13 @@ public class MainMenuHandler : MonoBehaviour
 
     public void ButtonEvt_Play()
     {
+        AudioSource.Play();
+        StartCoroutine(Co_Delay());
+    }
+
+    private IEnumerator Co_Delay()
+    {
+        yield return new WaitForSeconds(1.5f);
         SceneManager.LoadScene(mainGameSceneName);
     }
 

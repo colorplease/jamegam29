@@ -8,6 +8,8 @@ public class BarrierHandler : MonoBehaviour, IGameEventListener
     [SerializeField] private GameEvent levelCompletedEvent;
     [SerializeField] private int collisionDamage;
 
+    private AudioSource _audioSource;
+
     private BoxCollider2D _boxCollider2D;
     // Start is called before the first frame update
 
@@ -15,6 +17,7 @@ public class BarrierHandler : MonoBehaviour, IGameEventListener
     {
         levelCompletedEvent.RegisterListener(this);
         _boxCollider2D = GetComponent<BoxCollider2D>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void OnDestroy()
@@ -36,5 +39,6 @@ public class BarrierHandler : MonoBehaviour, IGameEventListener
     public void OnEventRaised()
     {
         _boxCollider2D.enabled = false;
+        _audioSource.Play();
     }
 }

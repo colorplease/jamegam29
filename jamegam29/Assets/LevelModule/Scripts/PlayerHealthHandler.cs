@@ -7,6 +7,10 @@ namespace LevelModule.Scripts
 {
     public class PlayerHealthHandler : MonoBehaviour, IDamageable, IGameEventListener
     {
+        [Header("Audio Clips")] 
+        
+        [SerializeField] private AudioClip playerHeal;
+        [SerializeField] private AudioClip playerTakeDamage;
         [SerializeField] private int maxHealth = 100; // The maximum health of the GameObject
         [SerializeField] private PlayerHealthBarHandler playerHealthBarHandler;
         [SerializeField] private GameEvent playerDeathEvent;
@@ -17,6 +21,8 @@ namespace LevelModule.Scripts
         [SerializeField] private float iFramesDuration;
 
         [SerializeField] private int numberOfFlashes;
+
+        [SerializeField]  private AudioSource playerHealthAudioSource;
         private int currentHealth; // The current health of the GameObject
         private bool _isAlive;
         private bool isInvulnerable;
@@ -25,6 +31,7 @@ namespace LevelModule.Scripts
         private void Awake()
         {
             killConfirmedEvent.RegisterListener(this);
+            playerHealthAudioSource = GetComponent<AudioSource>();
         }
 
         private void OnDestroy()
@@ -45,6 +52,8 @@ namespace LevelModule.Scripts
                 return;
             
             currentHealth -= damage;
+            playerHealthAudioSource.clip = playerTakeDamage;
+            playerHealthAudioSource.Play();
 
             // If the health drops to 0 or below, trigger death
             if (currentHealth <= 0)
@@ -102,6 +111,8 @@ namespace LevelModule.Scripts
                 killCount = 0;
                 
                 playerHealthBarHandler.UpdateHealthBar(currentHealth);
+                playerHealthAudioSource.clip = playerHeal;
+                playerHealthAudioSource.Play();
             }
         }
     }

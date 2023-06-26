@@ -18,6 +18,12 @@ namespace LevelModule.Scripts.Enemy
             
         }
 
+        [SerializeField] private AudioSource enemyAttackAudioSource;
+        [SerializeField] private AudioClip harpAttackClip;
+        [SerializeField] private AudioClip soyFishAttackClip;
+        [SerializeField] private AudioClip goldenGooseAttackClip;
+        [SerializeField] private AudioClip beanStalkAttackClip;
+        
         public float rotationSpeed;
         public EnemyData harpData;
         public EnemyData goldenGooseData;
@@ -71,7 +77,8 @@ namespace LevelModule.Scripts.Enemy
         private bool _isCoolingDown;
         private bool isFrozen;
 
-        
+
+        private EnemyType currentEnemyType;
        
 
         private void Awake()
@@ -116,6 +123,7 @@ namespace LevelModule.Scripts.Enemy
 
         public void SpriteInitializeEnemy(EnemyType enemyType)
         {
+            currentEnemyType = enemyType;
             switch (enemyType)
             {
                 case EnemyType.Harp:
@@ -175,22 +183,31 @@ namespace LevelModule.Scripts.Enemy
 
         private void Update()
         {
-            if (!enemyHealthHandler.IsAlive() || isFrozen)
+            if (!enemyHealthHandler.IsAlive() || isFrozen || _isCoolingDown)
                 return;
             
             switch(enemyData.enemyType)
             {
                 case EnemyType.Harp:
                     AttackHarp();
+                    enemyAttackAudioSource.clip = harpAttackClip;
+                    enemyAttackAudioSource.Play();
+                    Debug.Log("Playing Harp Sound");
                     break;
                 case EnemyType.SoyFish:
                     AttackSoyFish();
+                    enemyAttackAudioSource.clip = soyFishAttackClip;
+                    enemyAttackAudioSource.Play();
                     break;
                 case EnemyType.GoldenGoose:
                     AttackGoldenGoose();
+                    enemyAttackAudioSource.clip = goldenGooseAttackClip;
+                    enemyAttackAudioSource.Play();
                     break;
                 case EnemyType.BeanstalkTendrils:
                     AttackBeanstalkTendrils();
+                    enemyAttackAudioSource.clip = beanStalkAttackClip;
+                    enemyAttackAudioSource.Play();
                     break;
             }
         }
@@ -352,6 +369,11 @@ namespace LevelModule.Scripts.Enemy
                     hit.GetComponent<PlayerHealthHandler>().TakeDamage(enemyData.meleeAttackDamage);
                 }
             }
+        }
+
+        public EnemyType GetEnemyType()
+        {
+            return currentEnemyType;
         }
 
         private IEnumerator Co_Cooldown()

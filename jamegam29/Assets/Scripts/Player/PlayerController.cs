@@ -24,6 +24,19 @@ public class guns
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Audio Clips")] 
+    [SerializeField] private AudioSource playerWeaponAudioSource;
+    [SerializeField] private AudioSource abilityAudioSource;
+    [SerializeField] private AudioSource playerJumpAudioSource;
+    
+    [SerializeField] private AudioClip sniperAbilityAudioClip;
+    [SerializeField] private AudioClip abilityReady;
+    [SerializeField] private AudioClip sniperShot;
+    [SerializeField] private AudioClip shotgunShot;
+    [SerializeField] private AudioClip gunSwitch;
+    [SerializeField] private AudioClip playerJumpClip;
+    [SerializeField] private AudioClip playerDoubleJumpClip;
+    
     [Header("Movement Stuff idk")]
      [SerializeField]
     LayerMask lmWalls; //basically "what is jumpable?"
@@ -223,6 +236,8 @@ public class PlayerController : MonoBehaviour
                     sexyLight.intensity = 0;
                     sexyFlash.SetActive(true);
                     Time.timeScale = 0;
+                    abilityAudioSource.clip = sniperAbilityAudioClip;
+                    abilityAudioSource.Play();
                     StartCoroutine(sexyFreeze());   
                 }
                 else
@@ -258,7 +273,7 @@ public class PlayerController : MonoBehaviour
 
                 if (gun1AbilityChargeCount == 0)
                 {
-                    StartCoroutine(Co_GunAbilityCooldown(GunType.Gun2));
+                    StartCoroutine(Co_GunAbilityCooldown(GunType.Gun1));
                     heymaImdoingmyAbilityHere = false;
                 }
             }
@@ -268,7 +283,7 @@ public class PlayerController : MonoBehaviour
                 
                 if (gun2AbilityChargeCount == 0)
                 {
-                    StartCoroutine(Co_GunAbilityCooldown(GunType.Gun3));
+                    StartCoroutine(Co_GunAbilityCooldown(GunType.Gun2));
                     heymaImdoingmyAbilityHere = false;
                 }
 
@@ -328,7 +343,8 @@ public class PlayerController : MonoBehaviour
                 gun1AbilityChargeCount = gun1AbilityData.abilityCharges;
                 break;
         }
-        
+        abilityAudioSource.clip = abilityReady;
+        abilityAudioSource.Play();
     }
 
     IEnumerator crossHair()
@@ -349,6 +365,8 @@ public class PlayerController : MonoBehaviour
         //switches gun number and edits the gun object on the player to match using the gun[]
         if(Input.GetKeyDown(KeyCode.W))
         {
+            playerWeaponAudioSource.clip = gunSwitch;
+            playerWeaponAudioSource.Play();
             if(gunNumber < guns.Length - 2)
             {
                 gunNumber++;
@@ -398,7 +416,8 @@ public class PlayerController : MonoBehaviour
             
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
             rb.AddForce(-firePoint.right * guns[gunNumber].bulletForce, ForceMode2D.Impulse);
-            
+            playerWeaponAudioSource.clip = sniperShot;
+            playerWeaponAudioSource.Play();
             screenShake.ShakeShake(guns[gunNumber].shakeDuration, guns[gunNumber].curve, guns[gunNumber].intensifier);
         }
         if(Input.GetButtonDown("Fire1") && gunNumber == 0 && Time.time >= nextTimeToFire)
@@ -417,6 +436,8 @@ public class PlayerController : MonoBehaviour
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
                 rb.AddForce(-MovementDirection * guns[gunNumber].bulletForce, ForceMode2D.Impulse);
                 screenShake.ShakeShake(guns[gunNumber].shakeDuration, guns[gunNumber].curve, guns[gunNumber].intensifier);
+                playerWeaponAudioSource.clip =shotgunShot;
+                playerWeaponAudioSource.Play();
             }
         }
     }
@@ -465,10 +486,15 @@ public class PlayerController : MonoBehaviour
                     rigid.velocity = new Vector2(rigid.velocity.x, fJumpVelocity);
                     jumpCount++;
                 }
+
+                playerJumpAudioSource.clip = playerDoubleJumpClip;
+                playerJumpAudioSource.Play();
             }
             else
             {
                 fJumpPressedRemember = fJumpPressedRememberTime;
+                playerJumpAudioSource.clip = playerJumpClip;
+                playerJumpAudioSource.Play();
             }
         }
         

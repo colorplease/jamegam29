@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using GameEvents;
 using LevelModule.Scripts.Enemy;
 using UnityEngine;
@@ -7,6 +8,13 @@ namespace LevelModule.Scripts
 {
     public class EnemyHealthHandler : MonoBehaviour, IDamageable
     {
+        [SerializeField] private AudioSource enemyDeathAudioSource;
+        
+        [SerializeField] private AudioClip harpDeath;
+        [SerializeField] private AudioClip soyFishDeath;
+        [SerializeField] private AudioClip goldenGooseDeath;
+        [SerializeField] private AudioClip beanStalkDeath;
+        
         [SerializeField] private EnemyHealthBarHandler _enemyHealthBarHandler;
         [SerializeField] private GameEvent killConfirmedEvent;
         [SerializeField] private GameObject explosionVFX;
@@ -34,6 +42,8 @@ namespace LevelModule.Scripts
             
             _enemyHealthBarHandler.UpdateHealthBar(currentHealth);
 
+            
+
             // If the health drops to 0 or below, trigger death
             if (currentHealth <= 0)
             {
@@ -44,6 +54,30 @@ namespace LevelModule.Scripts
         private void Die()
         {
             killConfirmedEvent.Raise();
+            
+            var enemyType = GetComponent<EnemyController>().GetEnemyType();
+
+            switch (enemyType)
+            {
+                case EnemyController.EnemyType.Harp:
+                    enemyDeathAudioSource.clip = harpDeath;
+                    enemyDeathAudioSource.Play();
+                    break;
+                case EnemyController.EnemyType.SoyFish:
+                    enemyDeathAudioSource.clip = soyFishDeath;
+                    enemyDeathAudioSource.Play();
+                    break;
+                case EnemyController.EnemyType.GoldenGoose:
+                    enemyDeathAudioSource.clip = goldenGooseDeath;
+                    enemyDeathAudioSource.Play();
+                    break;
+                case EnemyController.EnemyType.BeanstalkTendrils:
+                    enemyDeathAudioSource.clip = beanStalkDeath;
+                    enemyDeathAudioSource.Play();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             // Instantiate the explosion effect when this enemy dies
             if (explodeOnDeath)
             {
@@ -69,7 +103,7 @@ namespace LevelModule.Scripts
             else
             {
                 // Destroy this enemy
-                Destroy(gameObject);
+                StartCoroutine(Co_DeathDelay());
             }
 
             _isAlive = false;
@@ -82,6 +116,13 @@ namespace LevelModule.Scripts
             explosionVFX.SetActive(true);
             _enemyHealthBarHandler.gameObject.SetActive(false);
             yield return new WaitForSeconds(0.5f);
+            Destroy(gameObject);
+        }
+
+        private IEnumerator Co_DeathDelay()
+        {
+            enemySprite.enabled = false;
+            yield return new WaitForSeconds(1f);
             Destroy(gameObject);
         }
 
