@@ -6,16 +6,13 @@ public class AbilityUIHandler : MonoBehaviour
 {
     public enum AbilityType
     {
-        Gun1Ability,
         Gun2Ability,
         Gun3Ability
     }
 
-    [SerializeField] private AbilityData gun1Data;
     [SerializeField] private AbilityData gun2Data;
     [SerializeField] private AbilityData gun3Data;
     
-    [SerializeField] private Image ability1FillIcon;
     [SerializeField] private Image ability2FillIcon;
     [SerializeField] private Image ability3FillIcon;
     
@@ -23,9 +20,6 @@ public class AbilityUIHandler : MonoBehaviour
     {
         switch (gunType)
         {
-            case PlayerController.GunType.Gun1:
-                ability1FillIcon.fillAmount = currentCooldown / gun1Data.abilityCooldown;
-                break;
             case PlayerController.GunType.Gun2:
                 ability2FillIcon.fillAmount = currentCooldown / gun2Data.abilityCooldown;
                 break;
@@ -39,9 +33,6 @@ public class AbilityUIHandler : MonoBehaviour
     {
         switch (gunType)
         {
-            case PlayerController.GunType.Gun1:
-                ability1FillIcon.fillAmount = 1;
-                break;
             case PlayerController.GunType.Gun2:
                 ability2FillIcon.fillAmount = 1;
                 break;

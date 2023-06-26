@@ -30,13 +30,24 @@ public class KillCountUIHandler : MonoBehaviour, IGameEventListener
 
     public void ResetKillAmountText()
     {
-        killAmountText.text = "Kills: 0";
+        killAmountText.text = "0";
         currentKillAmount = 0;
     }
 
     public void OnEventRaised()
     {
-        currentKillAmount++;
-        killAmountText.text = "Kills: " + currentKillAmount;
+        if(currentKillAmount < 9999)
+        {
+            currentKillAmount++;
+        }
+        killAmountText.gameObject.GetComponent<Animator>().SetBool("raised", true);
+        killAmountText.text = currentKillAmount.ToString();
+        StartCoroutine(sorryBwadeButThisIsTheOnlyWayIKnowHowToDoThings());
+    }
+
+    IEnumerator sorryBwadeButThisIsTheOnlyWayIKnowHowToDoThings()
+    {
+        yield return new WaitForSeconds(0.07f);
+        killAmountText.gameObject.GetComponent<Animator>().SetBool("raised", false);
     }
 }

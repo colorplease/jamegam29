@@ -6975,20 +6975,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26aff69ff1c609c46a4a408dbc06c604, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _levelManager: {fileID: 0}
+  screenShake: {fileID: 831319207}
+  zoomLevelData:
+  - 0
+  - 0
   levelTransitionEvent: {fileID: 11400000, guid: aa055f803cd8788418815532e27e93ea, type: 2}
   levelTransitionFinishedEvent: {fileID: 11400000, guid: c41f09d78b248f14ba656dc9822e5fab, type: 2}
   minHeight: -0.023
   target: {fileID: 1702399245}
-  levelStartTransforms:
-  - {fileID: 1524037341}
   offset: {x: 0, y: 0, z: 0}
   smoothSpeed: 3.5
   zoomOutSize: 1
-  zoomInSize: 5
   playerController: {fileID: 1702399241}
   zoomSpeed: 4
   transitionDelay: 0.2
-  screenShake: {fileID: 831319207}
 --- !u!82 &7249214849675044790
 AudioSource:
   m_ObjectHideFlags: 0

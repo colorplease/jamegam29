@@ -91,7 +91,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]UnityEngine.Rendering.Universal.Light2D sexyLight;
     Coroutine crossHairCoroutine;
     Coroutine trailCoroutine;
-     //used to resume aiming if enemy is out of line of sight
 
 
     [Header("Ability Data")] 
@@ -183,7 +182,7 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Mouse1))
         {
             //shotgun
-            if(gunNumber == 1 && !_isGun1OnCooldown)
+            if(gunNumber == 0 && !_isGun1OnCooldown)
             {
                 //turns on crosshair animation, visible to screen
                 crosshair.SetBool("byebye", true);
@@ -192,7 +191,7 @@ public class PlayerController : MonoBehaviour
             }
             
             //sniper
-            if(gunNumber == 2 && !_isGun2OnCooldown)
+            if(gunNumber == 1 && !_isGun2OnCooldown)
             {
                 enemiesicanshoot.Clear();
                 enemiesicanshootDistance.Clear();
@@ -218,9 +217,9 @@ public class PlayerController : MonoBehaviour
                     gun.rotation = Quaternion.Euler(0, 0, enemiesicanshoot[GetIndexOfLowestValue(enemiesicanshootDistanceArray)] - 90);
                     GameObject bullet = Instantiate(guns[gunNumber].bulletType, firePoint.position, firePoint.rotation);
                     Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                    bullet.GetComponent<PlayerBullet>().InitiializeBullet(guns[3].gunDamage);
-                    rb.AddForce(-firePoint.right * guns[3].bulletForce, ForceMode2D.Impulse);
-                    screenShake.ShakeShake(guns[3].shakeDuration, guns[3].curve, guns[3].intensifier);
+                    bullet.GetComponent<PlayerBullet>().InitiializeBullet(guns[2].gunDamage);
+                    rb.AddForce(-firePoint.right * guns[2].bulletForce, ForceMode2D.Impulse);
+                    screenShake.ShakeShake(guns[2].shakeDuration, guns[2].curve, guns[2].intensifier);
                     sexyLight.intensity = 0;
                     sexyFlash.SetActive(true);
                     Time.timeScale = 0;
@@ -235,7 +234,7 @@ public class PlayerController : MonoBehaviour
         }
         if(Input.GetKey(KeyCode.Mouse1))
         {
-            if(gunNumber == 1 && !_isGun1OnCooldown)
+            if(gunNumber == 0 && !_isGun1OnCooldown)
             {
                 //follows mouse position and activates trail renderer
                 crosshair.transform.position = new Vector3(mousePos.x, mousePos.y, crosshair.transform.position.z);
@@ -246,7 +245,7 @@ public class PlayerController : MonoBehaviour
         }
         if(Input.GetKeyUp(KeyCode.Mouse1))
         {
-            if(gunNumber == 1 && heymaImdoingmyAbilityHere == true && !_isGun1OnCooldown)
+            if(gunNumber == 0 && heymaImdoingmyAbilityHere == true && !_isGun1OnCooldown)
             {
                 //stops the crosshair coroutine for the bullet time, removes the crosshair, resets the player velocity, and resumes normal time
                 StopCoroutine(crossHairCoroutine);
@@ -263,7 +262,7 @@ public class PlayerController : MonoBehaviour
                     heymaImdoingmyAbilityHere = false;
                 }
             }
-            if(gunNumber == 2 && heymaImdoingmyAbilityHere == true && !_isGun2OnCooldown)
+            if(gunNumber == 1 && heymaImdoingmyAbilityHere == true && !_isGun2OnCooldown)
             {
                 gun2AbilityChargeCount--;
                 
@@ -275,7 +274,7 @@ public class PlayerController : MonoBehaviour
 
             }
             
-            if(gunNumber == 3 && heymaImdoingmyAbilityHere == true && !_isGun3OnCooldown)
+            if(gunNumber == 2 && heymaImdoingmyAbilityHere == true && !_isGun3OnCooldown)
             {
                 gun2AbilityChargeCount--;
                 
@@ -402,9 +401,9 @@ public class PlayerController : MonoBehaviour
 
     void Shooting()
     {
-        if(Input.GetButtonDown("Fire1") && gunNumber != 1 && Time.time >= nextTimeToFire)
+        if(Input.GetButtonDown("Fire1") && gunNumber != 0 && Time.time >= nextTimeToFire)
         {
-            if(gunNumber == 1 && heymaImdoingmyAbilityHere == true)
+            if(gunNumber == 0 && heymaImdoingmyAbilityHere == true)
             {
                 nextTimeToFire = Time.time;
                 print("ses");
@@ -421,7 +420,7 @@ public class PlayerController : MonoBehaviour
             
             screenShake.ShakeShake(guns[gunNumber].shakeDuration, guns[gunNumber].curve, guns[gunNumber].intensifier);
         }
-        if(Input.GetButtonDown("Fire1") && gunNumber == 1 && Time.time >= nextTimeToFire)
+        if(Input.GetButtonDown("Fire1") && gunNumber == 0 && Time.time >= nextTimeToFire)
         {
             nextTimeToFire = Time.time + 1f/guns[gunNumber].fireRate;
             for(int i = 0; i<Random.Range(10,15);i++)
