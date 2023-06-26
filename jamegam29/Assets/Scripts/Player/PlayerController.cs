@@ -537,7 +537,7 @@ public class PlayerController : MonoBehaviour
     
     public void FreezePlayer(bool isFrozen)
     {
-        StopAllCoroutines();
+       // StopAllCoroutines();
         Time.timeScale = 1;
         _isFrozen = isFrozen;
         rigid.isKinematic = isFrozen;

@@ -1071,6 +1071,7 @@ MonoBehaviour:
   mainMenuRef: {fileID: 1159247692}
   nextButton: {fileID: 1478795585}
   pageImageRef: {fileID: 696659226}
+  _canvasGroup: {fileID: 1583878003}
   pageText: {fileID: 1238038783}
   pageData:
   - {fileID: 11400000, guid: 3ba907d4e010bca499ba174f39f4cc2e, type: 2}

@@ -12,6 +12,7 @@ namespace LevelModule.Scripts.UI
         [SerializeField] private GameObject mainMenuRef;
         [SerializeField] private Button nextButton;
         [SerializeField] private Image pageImageRef;
+        [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private TextMeshProUGUI pageText;
         [SerializeField] private List<PageData> pageData;
     
@@ -38,17 +39,13 @@ namespace LevelModule.Scripts.UI
     
         private void ShowPage()
         {
-            
             pageImageRef.sprite = pageData[storyIndex].pageImage;
             
             // Create a sequence to combine multiple tweens
             Sequence sequence = DOTween.Sequence();
-
-            // Add a tween to the sequence to slide the image up
-            sequence.Append(pageImageRef.rectTransform.DOAnchorPosY(pageImageRef.rectTransform.anchoredPosition.y + 100, 0.25f));
-
+            
             // Add a tween to the sequence to fade the image in
-            sequence.Join(pageImageRef.DOFade(1, 0.25f));
+            sequence.Join(_canvasGroup.DOFade(1, 1f));
 
             // Start the sequence
             sequence.Play().OnComplete(() =>
@@ -87,7 +84,8 @@ namespace LevelModule.Scripts.UI
                 mainMenuRef.SetActive(true);
                 return;
             }
-            
+
+            _canvasGroup.alpha = 0;
             ShowPage();
         }
     }
